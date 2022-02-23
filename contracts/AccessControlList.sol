@@ -7,8 +7,14 @@ contract AccessControlList {
 
     constructor() {}
 
-    function get() public view returns (string memory) {}
+    function createAdminGroup() public {}
 
-    function set() public {}
+    function createGroup() public {}
+
+
+    //-------------------
+    // Getter methods
+    //-------------------
+    function get() public view returns (string memory) {}
 
 }
