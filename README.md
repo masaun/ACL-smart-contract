@@ -4,6 +4,14 @@
 
 <br>
 
+- Main specifications: 
+  - Users can have permissions (read or write) on a resource identified by a uint256 
+  - "admin users" should be able to set and update those permissions  
+  - There should be some kind of grouping mechanism for both users and admin users, with the ability to apply permissions to an entire   group, and to apply multiple groups to a resource.  
+    https://docs.google.com/document/d/1obZDbb2_i0FTYNdg6uPQWWEUdyIO51bFsTEiJdokDzk/edit 
+
+<br>
+
 ## 【Deployment】on Metis Testnet
 - Deploy a sample contract on Metis Testnet
 ```
