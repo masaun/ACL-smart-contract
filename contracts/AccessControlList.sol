@@ -14,7 +14,10 @@ contract AccessControlList {
 
     function createAdminGroup() public {}
 
-    function createGroup() public {}
+    function createGroup(address creatorAddress, address[] memory groupMembers) public {
+        Group memory group = groups[creatorAddress];
+        group.groupAddressList = groupMembers;
+    }
 
 
     //-------------------
