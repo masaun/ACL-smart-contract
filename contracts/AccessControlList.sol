@@ -5,6 +5,13 @@ import "hardhat/console.sol";
 
 contract AccessControlList {
 
+    uint public currentGroupId;
+
+    struct AdminGroup {
+        uint groupId;
+    }
+    mapping (uint => AdminGroup) adminGroups;  // [Key]: groupId -> the AdminGroup struct
+
     struct Group {
         address[] groupAddressList;     //@dev - A group is a list of wallet addresses
     }
@@ -12,7 +19,9 @@ contract AccessControlList {
 
     constructor() {}
 
-    function createAdminGroup() public {}
+    function createAdminGroup(uint groupId) public {
+        AdminGroup storage adminGroup = adminGroups[groupId];
+    }
 
     function createGroup(address creatorAddress, address[] memory groupMembers) public {
         Group memory group = groups[creatorAddress];
