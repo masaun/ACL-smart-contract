@@ -5,6 +5,11 @@ import "hardhat/console.sol";
 
 contract AccessControlList {
 
+    struct Group {
+        address[] groupAddressList;     //@dev - A group is a list of wallet addresses
+    }
+    mapping (address => Group) groups;  // [Key]: Creator address -> the Group struct
+
     constructor() {}
 
     function createAdminGroup() public {}
