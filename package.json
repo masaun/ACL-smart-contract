@@ -1,0 +1,26 @@
+{
+  "name": "retroactive-public-goods-funding",
+  "scripts": {
+    "accounts": "npx hardhat accounts --network hardhat",
+    "test": "npx hardhat test --network hardhat",
+    "test:Something": "npx hardhat test ./test/Something.test.js --network hardhat",
+    "test:Scenario": "npx hardhat test ./test/scenario.test.js --network hardhat",
+    "compile": "npx hardhat compile",
+    "deploy-local:Sample": "npx hardhat run scripts/deployment/00_deploy_Sample.js --network hardhat",    
+    "node": "npx hardhat node",
+    "script:Sample": "npx hardhat run scripts/sample-script.js --network hardhat"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "web3": "^1.6.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.2"
+  }
+}
