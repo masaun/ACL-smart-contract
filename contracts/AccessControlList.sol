@@ -19,14 +19,31 @@ contract AccessControlList {
 
     constructor() {}
 
-    function createAdminGroup(uint groupId) public {
+
+    //--------------------------------------------
+    // Methods for assiging/removing role
+    //---------------------------------------------
+    function assignRole(uint groupId, address user) public returns (bool) {
+        // [TODO]:
+    }
+
+    function removeRole(uint groupId, address user) public returns (bool) {
+        // [TODO]:
+    }
+
+
+    //------------------------------
+    // Methods for creating groups
+    //------------------------------
+    function createAdminGroup(uint groupId) public returns (bool)  {
         AdminGroup storage adminGroup = adminGroups[groupId];
     }
 
-    function createGroup(address creatorAddress, address[] memory groupMembers) public {
+    function createGroup(address creatorAddress, address[] memory groupMembers) public returns (bool) {
         Group memory group = groups[creatorAddress];
         group.groupAddressList = groupMembers;
     }
+
 
 
     //-------------------
