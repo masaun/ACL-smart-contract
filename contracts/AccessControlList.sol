@@ -5,26 +5,43 @@ import "hardhat/console.sol";
 
 contract AccessControlList {
 
-    uint public currentGroupId;
+    uint public currentAdminGroupId;
+    uint public currentMemberGroupId;
 
     //@dev - Role type
-    enum MemberRole { ADMIN, MEMBER }
+    //@dev - Admin user can read/write <-> member user can read only
+    enum UserRole { ADMIN, MEMBER }
 
     //---------------------------------------
     // Storages
     //----------------------------------------
-    mapping (uint => AdminGroup) adminGroups;  // [Key]: groupId -> the AdminGroup struct
-    mapping (address => Group) groups;         // [Key]: creator (admin) address -> the Group struct
+    mapping (uint => AdminGroup) adminGroups;     // [Key]: admin group ID -> the AdminGroup struct
+    mapping (uint => MemberGroup) memberGroups;   // [Key]: member group ID -> the Group struct
 
     struct AdminGroup {
-        uint groupId;
+        address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
     }
 
-    struct Group {
-        address[] groupAddressList;     //@dev - A group is a list of wallet addresses
+    struct MemberGroup {
+        address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
     }
 
     constructor() {}
+
+    //------------------------------
+    // Methods for creating groups
+    //------------------------------
+    function createAdminGroup(uint adminGroupId, address[] memory admins) public returns (bool)  {
+        uint adminGroupId = currentAdminGroupId++;
+        AdminGroup storage adminGroup = adminGroups[adminGroupId];
+        adminGroup.adminGroupAddresses = admins;
+    }
+
+    function createMemberGroup(uint memberGroupId, address[] memory members) public returns (bool) {
+        uint memberGroupId = currentMemberGroupId++;
+        MemberGroup storage memberGroup = memberGroups[memberGroupId];
+        memberGroup.memberGroupAddresses = members;
+    }
 
 
     //--------------------------------------------
@@ -40,17 +57,7 @@ contract AccessControlList {
     }
 
 
-    //------------------------------
-    // Methods for creating groups
-    //------------------------------
-    function createAdminGroup(uint groupId) public returns (bool)  {
-        AdminGroup storage adminGroup = adminGroups[groupId];
-    }
 
-    function createGroup(address creatorAddress, address[] memory groupMembers) public returns (bool) {
-        Group memory group = groups[creatorAddress];
-        group.groupAddressList = groupMembers;
-    }
 
 
 
