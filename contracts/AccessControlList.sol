@@ -7,15 +7,22 @@ contract AccessControlList {
 
     uint public currentGroupId;
 
+    //@dev - Role type
+    enum MemberRole { ADMIN, MEMBER }
+
+    //---------------------------------------
+    // Storages
+    //----------------------------------------
+    mapping (uint => AdminGroup) adminGroups;  // [Key]: groupId -> the AdminGroup struct
+    mapping (address => Group) groups;         // [Key]: creator (admin) address -> the Group struct
+
     struct AdminGroup {
         uint groupId;
     }
-    mapping (uint => AdminGroup) adminGroups;  // [Key]: groupId -> the AdminGroup struct
 
     struct Group {
         address[] groupAddressList;     //@dev - A group is a list of wallet addresses
     }
-    mapping (address => Group) groups;  // [Key]: Creator address -> the Group struct
 
     constructor() {}
 
@@ -25,6 +32,7 @@ contract AccessControlList {
     //---------------------------------------------
     function assignRole(uint groupId, address user) public returns (bool) {
         // [TODO]:
+
     }
 
     function removeRole(uint groupId, address user) public returns (bool) {

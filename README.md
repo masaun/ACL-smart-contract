@@ -1,6 +1,6 @@
 # ACL Smart Contract for Lit Protocol
 ## 【Overview】
-- This is the Access Control List (= ACL) smart contract that serves as an on-chain ACL.
+- This is a solidity smart contract that serves as an on-chain ACL (Access Control List).
 
 <br>
 
