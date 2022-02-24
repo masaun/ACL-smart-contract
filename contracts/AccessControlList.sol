@@ -15,17 +15,28 @@ contract AccessControlList {
     //---------------------------------------
     // Storages
     //----------------------------------------
+    mapping (uint => Admin) admins;     // [Key]: admin ID -> the Admin struct
+    mapping (uint => Member) members;   // [Key]: member ID -> the Member struct
+
     mapping (uint => AdminGroup) adminGroups;     // [Key]: admin group ID -> the AdminGroup struct
     mapping (uint => MemberGroup) memberGroups;   // [Key]: member group ID -> the Group struct
 
+    struct Admin {  // [Key]: Admin ID -> the AdminUser struct
+        address adminAddress;
+        UserRole userRole;
+    }
+
+    struct Member {  // [Key]: Member ID -> the AdminUser struct
+        address memberAddress;
+        UserRole userRole;
+    }
+
     struct AdminGroup {
         address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
-        UserRole userRole;
     }
 
     struct MemberGroup {
         address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
-        UserRole userRole;
     }
 
     constructor() {}
@@ -37,14 +48,14 @@ contract AccessControlList {
         uint adminGroupId = currentAdminGroupId++;
         AdminGroup storage adminGroup = adminGroups[adminGroupId];
         adminGroup.adminGroupAddresses = admins;
-        adminGroup.userRole = UserRole.ADMIN;
+        //adminGroup.userRole = UserRole.ADMIN;
     }
 
     function createMemberGroup(uint memberGroupId, address[] memory members) public returns (bool) {
         uint memberGroupId = currentMemberGroupId++;
         MemberGroup storage memberGroup = memberGroups[memberGroupId];
         memberGroup.memberGroupAddresses = members;
-        memberGroup.userRole = UserRole.MEMBER;
+        //memberGroup.userRole = UserRole.MEMBER;
     }
 
 
