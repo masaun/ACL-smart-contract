@@ -7,6 +7,7 @@ contract AccessControlList {
 
     uint public currentAdminGroupId;
     uint public currentMemberGroupId;
+    uint public currentGroupId;
 
     //@dev - Role type
     //@dev - Admin user can read/write <-> member user can read only
@@ -20,6 +21,7 @@ contract AccessControlList {
 
     mapping (uint => AdminGroup) adminGroups;     // [Key]: admin group ID -> the AdminGroup struct
     mapping (uint => MemberGroup) memberGroups;   // [Key]: member group ID -> the Group struct
+    mapping (uint => Group) groups;               // [Key]: member group ID -> the Group struct
 
     struct Admin {  // [Key]: Admin ID -> the AdminUser struct
         address adminAddress;
@@ -39,11 +41,24 @@ contract AccessControlList {
         address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
     }
 
+    struct Group {
+        address adminAddress;
+        address[] memberAddresses;
+    }
+
+
     constructor() {}
 
     //------------------------------
     // Methods for creating groups
     //------------------------------
+    function createGroup(uint groupId, address admin, address[] memory memberAddresses) public returns (bool)  {
+        uint groupId = currentGroupId++;
+        Group storage group = groups[groupId];
+        group.adminAddress = admin;
+        group.memberAddresses = memberAddresses;
+    }
+
     function createAdminGroup(uint adminGroupId, address[] memory admins) public returns (bool)  {
         uint adminGroupId = currentAdminGroupId++;
         AdminGroup storage adminGroup = adminGroups[adminGroupId];
