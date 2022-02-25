@@ -5,6 +5,13 @@ import "hardhat/console.sol";
 
 contract Resource {
 
+    //@dev - In progress
+    struct ResourceMetadata {
+        address contentAddress;
+        uint amount;
+    }
+    mapping (address => ResourceMetadata) resourceMetadatas;  //@dev - Only 
+
     constructor() {}
 
     function something() public returns (bool) {}
