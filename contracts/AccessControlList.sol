@@ -18,31 +18,21 @@ contract AccessControlList {
     //----------------------------------------
     mapping (uint => Admin) admins;     // [Key]: admin ID -> the Admin struct
     mapping (uint => Member) members;   // [Key]: member ID -> the Member struct
-
-    mapping (uint => AdminGroup) adminGroups;     // [Key]: admin group ID -> the AdminGroup struct
-    mapping (uint => MemberGroup) memberGroups;   // [Key]: member group ID -> the Group struct
-    mapping (uint => Group) groups;               // [Key]: member group ID -> the Group struct
+    mapping (uint => Group) groups;     // [Key]: group ID -> the Group struct
 
     struct Admin {  // [Key]: Admin ID -> the AdminUser struct
         address adminAddress;
-        UserRole userRole;
     }
 
     struct Member {  // [Key]: Member ID -> the AdminUser struct
         address memberAddress;
-        UserRole userRole;
     }
 
-    struct AdminGroup {
-        address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
-    }
-
-    struct MemberGroup {
-        address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
-    }
+    address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
+    address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
 
     struct Group {
-        address adminAddress;
+        address[] adminAddresses;
         address[] memberAddresses;
     }
 
@@ -52,10 +42,10 @@ contract AccessControlList {
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup(uint groupId, address admin, address[] memory memberAddresses) public returns (bool)  {
+    function createGroup(uint groupId, address[] memory adminAddresses, address[] memory memberAddresses) public returns (bool)  {
         uint groupId = currentGroupId++;
         Group storage group = groups[groupId];
-        group.adminAddress = admin;
+        group.adminAddresses = adminAddresses;
         group.memberAddresses = memberAddresses;
     }
 
@@ -75,18 +65,26 @@ contract AccessControlList {
 
 
     //--------------------------------------------
-    // Methods for assiging/removing role
+    // Methods for assiging/removing role of admin or member
     //---------------------------------------------
-    function assignRole(uint groupId, address user) public returns (bool) {
-        // [TODO]:
-
+    function assignAdmin(uint groupId, address user, UserRole userRole) public returns (bool) {
+        Group memory group = groups[groupId];
+        group.adminAddresses = adminGroupAddresses.push(user);
     }
 
-    function removeRole(uint groupId, address user) public returns (bool) {
+    function assignMember(uint groupId, address user, UserRole userRole) public returns (bool) {
+        Group memory group = groups[groupId];
+        address[] memory currentMemberAddresses = group.memberAddresses;
+        group.memberAddresses = currentMemberAddresses.push(user);
+    }
+
+    function removeAdmin(uint groupId, address existingAdmin) public returns (bool) {
         // [TODO]:
     }
 
-
+    function removeMember(uint groupId, address existingMember) public returns (bool) {
+        // [TODO]:
+    }
 
 
 
