@@ -5,84 +5,81 @@ import "hardhat/console.sol";
 
 contract AccessControlList {
 
-    uint public currentAdminGroupId;
-    uint public currentMemberGroupId;
+    uint public currentUserId;
     uint public currentGroupId;
 
-    //@dev - Role type
-    //@dev - Admin user can read/write <-> member user can read only
-    enum UserRole { ADMIN, MEMBER }
 
     //---------------------------------------
     // Storages
     //----------------------------------------
-    mapping (uint => Admin) admins;     // [Key]: admin ID -> the Admin struct
-    mapping (uint => Member) members;   // [Key]: member ID -> the Member struct
+    mapping (uint => User) users;     // [Key]: user ID -> the User struct    
     mapping (uint => Group) groups;     // [Key]: group ID -> the Group struct
 
-    struct Admin {  // [Key]: Admin ID -> the AdminUser struct
-        address adminAddress;
+    //@dev - Role type: Admin user can read/write <-> member user can read only
+    enum UserRole { ADMIN, MEMBER }
+
+    struct User {  // [Key]: user ID -> the User struct
+        address userAddress;
+        UserRole userRole;   // Admin or Member
     }
 
-    struct Member {  // [Key]: Member ID -> the AdminUser struct
-        address memberAddress;
-    }
+    address[] public currentAdminAddresses;
+    address[] public currentMemberAddresses;
 
-    address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
-    address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
-
-    struct Group {
-        address[] adminAddresses;
-        address[] memberAddresses;
+    struct Group {  // [Key]: group ID -> the Group struct
+        address[] adminAddresses;   //@dev - list of admin's wallet addresses
+        address[] memberAddresses;  //@dev - list of member's wallet addresses
     }
 
 
     constructor() {}
 
+
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup(uint groupId, address[] memory adminAddresses, address[] memory memberAddresses) public returns (bool)  {
+    function createGroup(
+        uint groupId, 
+        address[] memory adminAddresses,   // Initial admin's addresses
+        address[] memory memberAddresses   // Initial member's addresses
+    ) public returns (bool)  {
         uint groupId = currentGroupId++;
         Group storage group = groups[groupId];
         group.adminAddresses = adminAddresses;
         group.memberAddresses = memberAddresses;
     }
 
-    function createAdminGroup(uint adminGroupId, address[] memory admins) public returns (bool)  {
-        uint adminGroupId = currentAdminGroupId++;
-        AdminGroup storage adminGroup = adminGroups[adminGroupId];
-        adminGroup.adminGroupAddresses = admins;
-        //adminGroup.userRole = UserRole.ADMIN;
-    }
-
-    function createMemberGroup(uint memberGroupId, address[] memory members) public returns (bool) {
-        uint memberGroupId = currentMemberGroupId++;
-        MemberGroup storage memberGroup = memberGroups[memberGroupId];
-        memberGroup.memberGroupAddresses = members;
-        //memberGroup.userRole = UserRole.MEMBER;
-    }
-
 
     //--------------------------------------------
     // Methods for assiging/removing role of admin or member
     //---------------------------------------------
-    function assignAdmin(uint groupId, address user, UserRole userRole) public returns (bool) {
+    function assignUserAsAdmin(uint groupId, address _userAddress) public returns (bool) {
+        uint userId = currentUserId++;
+        User memory user = users[userId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.ADMIN;
+
+        currentAdminAddresses.push(_userAddress);
         Group memory group = groups[groupId];
-        group.adminAddresses = adminGroupAddresses.push(user);
+        group.adminAddresses = currentAdminAddresses;
     }
 
-    function assignMember(uint groupId, address user, UserRole userRole) public returns (bool) {
+    function assignUserAsMember(uint groupId, address _userAddress) public returns (bool) {
+        uint userId = currentUserId++;
+        User memory user = users[userId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.MEMBER;
+
+        currentAdminAddresses.push(_userAddress);
         Group memory group = groups[groupId];
-        address[] memory currentMemberAddresses = group.memberAddresses;
-        group.memberAddresses = currentMemberAddresses.push(user);
+        group.memberAddresses = currentMemberAddresses;
     }
 
-    function removeAdmin(uint groupId, address existingAdmin) public returns (bool) {
+    function removeAdminUser(uint groupId, address existingAdminUser) public returns (bool) {
         // [TODO]:
     }
 
-    function removeMember(uint groupId, address existingMember) public returns (bool) {
+    function removeMemberUser(uint groupId, address existingMemberUser) public returns (bool) {
         // [TODO]:
     }
 
