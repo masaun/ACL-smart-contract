@@ -5,15 +5,20 @@ import "hardhat/console.sol";
 
 contract Resource {
 
-    //@dev - In progress
+    //@dev - Metadata that are accociated with the Resource contract
     struct ResourceMetadata {
-        address contentAddress;
-        uint amount;
+        string resourceName;
+        uint resourceAmount;
     }
-    mapping (address => ResourceMetadata) resourceMetadatas;  //@dev - Only 
+    mapping (address => ResourceMetadata) resourceMetadatas;  // [Key]: Resource contract address -> the ResourceMetadata struct
 
     constructor() {}
 
-    function something() public returns (bool) {}
+    /**
+     * @dev - Get a ResourceMetadata struct that are accociated with the Resource contract
+     */ 
+    function getResourceMetadata() public returns (ResourceMetadata memory _resourceMetadata) {
+        return resourceMetadatas[address(this)];
+    }
 
 }
