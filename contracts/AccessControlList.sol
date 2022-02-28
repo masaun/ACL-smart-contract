@@ -53,7 +53,7 @@ contract AccessControlList {
     //--------------------------------------------
     // Methods for assiging/removing role of admin or member
     //---------------------------------------------
-    function assignUserAsAdmin(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsAdmin(uint groupId, uint userId, address _userAddress) public returns (bool) {
         User storage user = users[userId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
@@ -64,7 +64,7 @@ contract AccessControlList {
         group.adminAddresses = currentAdminAddresses;
     }
 
-    function assignUserAsMember(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsMember(uint groupId, uint userId, address _userAddress) public returns (bool) {
         User storage user = users[userId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
