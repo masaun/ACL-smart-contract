@@ -83,7 +83,7 @@ contract AccessControlList {
         User storage user = users[userId];
         user.userRole = UserRole.MEMBER;
 
-        currentAdminAddresses.remove(user.userAddress);
+        delete currentAdminAddresses[userId];
         Group storage group = groups[groupId];
         group.adminAddresses = currentAdminAddresses;
     }
@@ -95,7 +95,7 @@ contract AccessControlList {
         User storage user = users[userId];
         user.userRole = UserRole.DELETED;
 
-        currentMemberAddresses.remove(userId);
+        delete currentMemberAddresses[userId];
         Group storage group = groups[groupId];
         group.memberAddresses = currentMemberAddresses;
     }
