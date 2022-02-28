@@ -8,6 +8,8 @@ contract AccessControlList {
     uint public currentUserId;   // user ID is counted from 0
     uint public currentGroupId;  // group ID is counted from 0
 
+    address[] public currentAdminAddresses;
+    address[] public currentMemberAddresses;
 
     //---------------------------------------
     // Storages
@@ -22,9 +24,6 @@ contract AccessControlList {
         address userAddress;
         UserRole userRole;   // Admin or Member
     }
-
-    address[] public currentAdminAddresses;
-    address[] public currentMemberAddresses;
 
     struct Group {  // [Key]: group ID -> the Group struct
         address[] adminAddresses;   //@dev - list of admin's wallet addresses

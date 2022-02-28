@@ -1,9 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.10;
 
+import { AccessControlList } from "../AccessControlList.sol";
+
 import "hardhat/console.sol";
 
-contract Resource {
+contract Resource is AccessControlList {
 
     //@dev - Metadata that are accociated with the Resource contract
     struct ResourceMetadata {
