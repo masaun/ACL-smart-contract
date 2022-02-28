@@ -3,8 +3,8 @@
   "scripts": {
     "accounts": "npx hardhat accounts --network hardhat",
     "test": "npx hardhat test --network hardhat",
-    "test:Something": "npx hardhat test ./test/Something.test.js --network hardhat",
-    "test:Scenario": "npx hardhat test ./test/scenario.test.js --network hardhat",
+    "test:AccessControlList": "npx hardhat test ./test/AccessControlList.test.js --network hardhat",
+    "test:Scenario": "npx hardhat test ./test/Scenario.test.js --network hardhat",
     "compile": "npx hardhat compile",
     "deploy-local:Sample": "npx hardhat run scripts/deployment/00_deploy_Sample.js --network hardhat",    
     "node": "npx hardhat node",
