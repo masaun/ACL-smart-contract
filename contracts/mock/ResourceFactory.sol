@@ -12,9 +12,9 @@ import "hardhat/console.sol";
  */ 
 contract ResourceFactory {
 
-    uint currentResourceId;  //@dev - Count of resource ID is started from 0
+    uint currentResourceId;  //@dev - resource ID is counted from 0
 
-    address[] public resourceAddresses; //@dev - Every resource's addresses created
+    address[] public resourceAddresses; //@dev - Every resource's addresses created are stored into this array
 
     constructor() {}
 
