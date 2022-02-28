@@ -1,92 +1,104 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.10;
 
 import "hardhat/console.sol";
 
 contract AccessControlList {
 
-    uint public currentAdminGroupId;
-    uint public currentMemberGroupId;
-    uint public currentGroupId;
+    uint public currentUserId;   // user ID is counted from 0
+    uint public currentGroupId;  // group ID is counted from 0
 
-    //@dev - Role type
-    //@dev - Admin user can read/write <-> member user can read only
-    enum UserRole { ADMIN, MEMBER }
 
     //---------------------------------------
     // Storages
     //----------------------------------------
-    mapping (uint => Admin) admins;     // [Key]: admin ID -> the Admin struct
-    mapping (uint => Member) members;   // [Key]: member ID -> the Member struct
+    mapping (uint => User) users;     // [Key]: user ID -> the User struct    
+    mapping (uint => Group) groups;   // [Key]: group ID -> the Group struct
 
-    mapping (uint => AdminGroup) adminGroups;     // [Key]: admin group ID -> the AdminGroup struct
-    mapping (uint => MemberGroup) memberGroups;   // [Key]: member group ID -> the Group struct
-    mapping (uint => Group) groups;               // [Key]: member group ID -> the Group struct
+    //@dev - Role type: Admin user can read/write <-> member user can read only
+    enum UserRole { ADMIN, MEMBER, DELETED }
 
-    struct Admin {  // [Key]: Admin ID -> the AdminUser struct
-        address adminAddress;
-        UserRole userRole;
+    struct User {  // [Key]: user ID -> the User struct
+        address userAddress;
+        UserRole userRole;   // Admin or Member
     }
 
-    struct Member {  // [Key]: Member ID -> the AdminUser struct
-        address memberAddress;
-        UserRole userRole;
-    }
+    address[] public currentAdminAddresses;
+    address[] public currentMemberAddresses;
 
-    struct AdminGroup {
-        address[] adminGroupAddresses;   //@dev - list of admin's wallet addresses
-    }
-
-    struct MemberGroup {
-        address[] memberGroupAddresses;   //@dev - list of member's wallet addresses
-    }
-
-    struct Group {
-        address adminAddress;
-        address[] memberAddresses;
+    struct Group {  // [Key]: group ID -> the Group struct
+        address[] adminAddresses;   //@dev - list of admin's wallet addresses
+        address[] memberAddresses;  //@dev - list of member's wallet addresses
     }
 
 
     constructor() {}
 
+
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup(uint groupId, address admin, address[] memory memberAddresses) public returns (bool)  {
-        uint groupId = currentGroupId++;
+    function createGroup(
+        uint groupId, 
+        address[] memory adminAddresses,   // Initial admin's addresses
+        address[] memory memberAddresses   // Initial member's addresses
+    ) public returns (bool)  {
         Group storage group = groups[groupId];
-        group.adminAddress = admin;
+        group.adminAddresses = adminAddresses;
         group.memberAddresses = memberAddresses;
-    }
-
-    function createAdminGroup(uint adminGroupId, address[] memory admins) public returns (bool)  {
-        uint adminGroupId = currentAdminGroupId++;
-        AdminGroup storage adminGroup = adminGroups[adminGroupId];
-        adminGroup.adminGroupAddresses = admins;
-        //adminGroup.userRole = UserRole.ADMIN;
-    }
-
-    function createMemberGroup(uint memberGroupId, address[] memory members) public returns (bool) {
-        uint memberGroupId = currentMemberGroupId++;
-        MemberGroup storage memberGroup = memberGroups[memberGroupId];
-        memberGroup.memberGroupAddresses = members;
-        //memberGroup.userRole = UserRole.MEMBER;
+        uint groupId = currentGroupId++;
     }
 
 
     //--------------------------------------------
-    // Methods for assiging/removing role
+    // Methods for assiging/removing role of admin or member
     //---------------------------------------------
-    function assignRole(uint groupId, address user) public returns (bool) {
-        // [TODO]:
+    function assignUserAsAdmin(uint groupId, uint userId, address _userAddress) public returns (bool) {
+        User storage user = users[userId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.ADMIN;
+        uint userId = currentUserId++;
 
+        currentAdminAddresses.push(_userAddress);
+        Group storage group = groups[groupId];
+        group.adminAddresses = currentAdminAddresses;
     }
 
-    function removeRole(uint groupId, address user) public returns (bool) {
-        // [TODO]:
+    function assignUserAsMember(uint groupId, uint userId, address _userAddress) public returns (bool) {
+        User storage user = users[userId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.MEMBER;
+        uint userId = currentUserId++;
+
+        currentAdminAddresses.push(_userAddress);
+        Group storage group = groups[groupId];
+        group.memberAddresses = currentMemberAddresses;
     }
 
 
+    /**
+     * @dev - Remove admin role from a admin user. After that, a role status of this user become "Member"
+     */ 
+    function removeAdminRole(uint groupId, uint userId) public returns (bool) {
+        User storage user = users[userId];
+        user.userRole = UserRole.MEMBER;
+
+        delete currentAdminAddresses[userId];
+        Group storage group = groups[groupId];
+        group.adminAddresses = currentAdminAddresses;
+    }
+
+    /**
+     * @dev - Remove admin role from a admin user. After that, a role status of this user become "Deleted"
+     */
+    function removeMemberRole(uint groupId, uint userId) public returns (bool) {
+        User storage user = users[userId];
+        user.userRole = UserRole.DELETED;
+
+        delete currentMemberAddresses[userId];
+        Group storage group = groups[groupId];
+        group.memberAddresses = currentMemberAddresses;
+    }
 
 
 
