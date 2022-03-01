@@ -4,10 +4,10 @@ const { ethers } = require("hardhat")
 
 describe("Senario Test", function () {
     //@dev - Contract instance
-    let acl
+    let resource
 
     //@dev - Contract addresses
-    let ACL
+    let RESOURCE
 
     //@dev - Signers of wallet addresses
     let deployer
@@ -28,10 +28,10 @@ describe("Senario Test", function () {
     })
 
 
-    it("Deploy the AccessControlList.sol", async function () {
-        const AccessControlList = await ethers.getContractFactory("AccessControlList")
-        acl = await AccessControlList.deploy()
-        await acl.deployed()
+    it("Deploy the Resource.sol (that the AccessControlList.sol is inherited)", async function () {
+        const Resource = await ethers.getContractFactory("Resource")
+        resource = await Resource.deploy()
+        await resource.deployed()
     })
 
 
@@ -40,7 +40,7 @@ describe("Senario Test", function () {
     ///-----------------------
 
     it("createGroup()", async function () {
-        let tx = await acl.connect(user1).createGroup()
+        let tx = await resource.connect(user1).createGroup()
         let txReceipt = await tx.wait()
     })
 
@@ -48,7 +48,7 @@ describe("Senario Test", function () {
         const groupId = 0
         const userAddress = USER_1
 
-        let tx = await acl.connect(user1).assignUserAsAdmin(groupId, userAddress)
+        let tx = await resource.connect(user1).assignUserAsAdmin(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
@@ -56,7 +56,7 @@ describe("Senario Test", function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await acl.connect(user2).assignUserAsAdmin(groupId, userAddress)
+        let tx = await resource.connect(user2).assignUserAsAdmin(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
@@ -64,7 +64,7 @@ describe("Senario Test", function () {
         const groupId = 0
         const userId = 0
 
-        let tx = await acl.connect(user1).removeAdminRole(groupId, userId)
+        let tx = await resource.connect(user1).removeAdminRole(groupId, userId)
         let txReceipt = await tx.wait()
     })
 
@@ -72,7 +72,7 @@ describe("Senario Test", function () {
         const groupId = 0
         const userId = 1
 
-        let tx = await acl.connect(user2).removeMemberRole(groupId, userId)
+        let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
         let txReceipt = await tx.wait()
     })
 })
