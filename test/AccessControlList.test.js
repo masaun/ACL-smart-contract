@@ -70,7 +70,11 @@ describe("AccessControlList", function () {
     })
 
     it("removeMemberRole()", async function () {
-        // [TODO]:
+        const groupId = 0
+        const userId = 1
+
+        let tx = await acl.connect(user2).removeMemberRole(groupId, userId)
+        let txReceipt = await tx.wait()
     })
 
 })
