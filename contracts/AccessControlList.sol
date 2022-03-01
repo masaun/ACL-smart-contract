@@ -81,7 +81,6 @@ contract AccessControlList {
         group.memberAddresses = currentMemberAddresses;
     }
 
-
     /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Member"
      */ 

@@ -28,7 +28,6 @@ describe("AccessControlList", function () {
         USER_2 = user2.address
     })
 
-
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
         acl = await AccessControlList.deploy()
