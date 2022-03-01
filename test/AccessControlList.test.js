@@ -8,4 +8,30 @@ describe("AccessControlList", function () {
         const acl = await AccessControlList.deploy()
         await acl.deployed()
     })
+
+
+    ///-----------------------
+    /// Test of main methods
+    ///-----------------------
+
+    it("createGroup()", async function () {
+        // [TODO]:
+    })
+
+    it("assignUserAsAdmin()", async function () {
+        // [TODO]:
+    })
+
+    it("assignUserAsMember()", async function () {
+        // [TODO]:
+    })
+
+    it("removeAdminRole()", async function () {
+        // [TODO]:
+    })
+
+    it("removeMemberRole()", async function () {
+        // [TODO]:
+    })
+
 })
