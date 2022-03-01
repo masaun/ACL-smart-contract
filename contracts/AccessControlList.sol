@@ -11,7 +11,7 @@ contract AccessControlList {
     address[] public currentAdminAddresses;
     address[] public currentMemberAddresses;
 
-    //---------------------------------------
+    //----------------------------------------
     // Storages
     //----------------------------------------
     mapping (uint => User) users;     // [Key]: user ID -> the User struct    
@@ -31,7 +31,31 @@ contract AccessControlList {
     }
 
 
+    //-----------------
+    // Constructor
+    //-----------------
     constructor() {}
+
+
+    //-----------------
+    // Modifiers
+    //-----------------
+
+    /**
+     * @dev - Check permission (Read/Write) for admin users 
+     */ 
+    modifier permissionForAdmin(uint _time) { 
+        require (now >= _time);  // [TODO]: Replace logic
+        _;
+    }
+
+    /**
+     * @dev - Check permission (Read only) for member users 
+     */ 
+    modifier permissionForMember(uint _time) { 
+        require (now >= _time);  // [TODO]: Replace logic
+        _;
+    }
 
 
     //------------------------------
