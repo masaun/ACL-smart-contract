@@ -15,7 +15,7 @@ describe("AccessControlList", function () {
 
     //before(async function () {
     beforeEach(async function () {
-        [owner, addr1, addr2, ...addrs] = await ethers.getSigners()
+        [deployer, user1, user2, ...addrs] = await ethers.getSigners()
     })
 
 
@@ -31,12 +31,16 @@ describe("AccessControlList", function () {
     ///-----------------------
 
     it("createGroup()", async function () {
-        let tx = await acl.connect(owner).createGroup()
+        let tx = await acl.connect(user1).createGroup()
         let txReceipt = await tx.wait()
     })
 
     it("assignUserAsAdmin()", async function () {
-        // [TODO]:
+        const groupId = 0
+        const userAddress = user1.address
+
+        let tx = await acl.connect(user1).assignUserAsAdmin(groupId, userAddress)
+        let txReceipt = await tx.wait()
     })
 
     it("assignUserAsMember()", async function () {
