@@ -54,7 +54,11 @@ describe("AccessControlList", function () {
     })
 
     it("assignUserAsMember()", async function () {
-        // [TODO]:
+        const groupId = 0
+        const userAddress = USER_2
+
+        let tx = await acl.connect(user2).assignUserAsAdmin(groupId, userAddress)
+        let txReceipt = await tx.wait()
     })
 
     it("removeAdminRole()", async function () {
