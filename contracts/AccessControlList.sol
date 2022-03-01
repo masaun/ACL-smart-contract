@@ -89,7 +89,13 @@ contract AccessControlList {
         User storage user = users[userId];
         user.userRole = UserRole.MEMBER;
 
-        delete currentAdminAddresses[userId];
+        for (uint i=0; i < currentAdminAddresses.length; i++) {
+            address adminAddress = currentAdminAddresses[i];
+            if (adminAddress == user.userAddress) {
+                delete currentAdminAddresses[i];
+            }
+        }
+
         Group storage group = groups[groupId];
         group.adminAddresses = currentAdminAddresses;
     }
