@@ -44,17 +44,27 @@ contract AccessControlList {
     /**
      * @dev - Check permission (Read/Write) for admin users 
      */ 
-    modifier permissionForAdmin(uint _time) { 
-        require (now >= _time);  // [TODO]: Replace logic
-        _;
+    modifier permissionForAdmin(address user) {
+        //@dev - Check whether a user specified has an admin role or not 
+        for (uint i=0; i < currentAdminAddresses.length; i++) {
+            address adminAddress = currentAdminAddresses[i];
+            
+            require (user == adminAddress, "User must has an admin role");
+            _;
+        }
     }
 
     /**
      * @dev - Check permission (Read only) for member users 
      */ 
-    modifier permissionForMember(uint _time) { 
-        require (now >= _time);  // [TODO]: Replace logic
-        _;
+    modifier permissionForMember(address user) { 
+        //@dev - Check whether a user specified has a member role or not 
+        for (uint i=0; i < currentMemberAddresses.length; i++) {
+            address memberAddress = currentMemberAddresses[i];
+            
+            require (user == memberAddress, "User must has an member role");
+            _;
+        }
     }
 
 
