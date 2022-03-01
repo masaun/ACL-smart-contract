@@ -4,12 +4,24 @@ const { ethers } = require("hardhat")
 
 describe("AccessControlList", function () {
 
+    //@dev - Wallet address
+    let owner
+    let addr1
+    let addr2
+    let addrs
+
     //@dev - Contract instance
     let acl
 
+    //before(async function () {
+    beforeEach(async function () {
+        [owner, addr1, addr2, ...addrs] = await ethers.getSigners()
+    })
+
+
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
-        const acl = await AccessControlList.deploy()
+        acl = await AccessControlList.deploy()
         await acl.deployed()
     })
 
@@ -19,7 +31,8 @@ describe("AccessControlList", function () {
     ///-----------------------
 
     it("createGroup()", async function () {
-        // [TODO]:
+        let tx = await acl.connect(owner).createGroup()
+        let txReceipt = await tx.wait()
     })
 
     it("assignUserAsAdmin()", async function () {
