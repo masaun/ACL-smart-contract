@@ -3,6 +3,10 @@ const { ethers } = require("hardhat")
 
 
 describe("AccessControlList", function () {
+
+    //@dev - Contract instance
+    let acl
+
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
         const acl = await AccessControlList.deploy()

@@ -37,15 +37,11 @@ contract AccessControlList {
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup(
-        uint groupId, 
-        address[] memory adminAddresses,   // Initial admin's addresses
-        address[] memory memberAddresses   // Initial member's addresses
-    ) public returns (bool)  {
-        Group storage group = groups[groupId];
-        group.adminAddresses = adminAddresses;
-        group.memberAddresses = memberAddresses;
-        uint groupId = currentGroupId++;
+    function createGroup() public returns (bool)  {
+        Group storage group = groups[currentGroupId];
+        group.adminAddresses = currentAdminAddresses;
+        group.memberAddresses = currentMemberAddresses;
+        currentGroupId++;
     }
 
 
