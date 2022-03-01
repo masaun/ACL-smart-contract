@@ -31,11 +31,11 @@ npm run script-metis_testnet:Sample
 <br>
 
 ## 【Test】
-- Run a unit test of the Something.sol
+- Run a unit test of the AccessControlList.sol
 ```
-npm run test:Something
+npm run test:AccessControlList
 ```
-( `$ npx hardhat test ./test/Something.test.js --network hardhat` )
+( `$ npx hardhat test ./test/AccessControlList.test.js --network hardhat` )
 
 <br>
 
@@ -51,7 +51,7 @@ npm run test
 ```
 npm run test:Scenario
 ```
-( `$ npx hardhat test ./test/scenario.test.js --network hardhat` )
+( `$ npx hardhat test ./test/AccessControlList.test.js --network hardhat` )
 
 <br>
 
