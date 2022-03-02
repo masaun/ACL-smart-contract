@@ -44,12 +44,12 @@ contract AccessControlList {
     /**
      * @dev - Check permission (Read/Write) for admin users 
      */ 
-    modifier permissionForAdmin(address user) {
+    modifier onlyAdmin(address user) {
         //@dev - Check whether a user specified has an admin role or not 
         for (uint i=0; i < currentAdminAddresses.length; i++) {
             address adminAddress = currentAdminAddresses[i];
             
-            require (user == adminAddress, "User must has an admin role");
+            require (user == adminAddress, "Only user who has an admin role can access this resources");
             _;
         }
     }
@@ -57,12 +57,12 @@ contract AccessControlList {
     /**
      * @dev - Check permission (Read only) for member users 
      */ 
-    modifier permissionForMember(address user) { 
+    modifier onlyMember(address user) { 
         //@dev - Check whether a user specified has a member role or not 
         for (uint i=0; i < currentMemberAddresses.length; i++) {
             address memberAddress = currentMemberAddresses[i];
             
-            require (user == memberAddress, "User must has an member role");
+            require (user == memberAddress, "Only user who has an member role can access this resources");
             _;
         }
     }
