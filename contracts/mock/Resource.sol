@@ -18,8 +18,9 @@ contract Resource is AccessControlList {
 
     /**
      * @dev - Get a ResourceMetadata struct that are accociated with the Resource contract
+     * @notice - Only group member (who has an admin or member role) can call this method.
      */ 
-    function getResourceMetadata() public returns (ResourceMetadata memory _resourceMetadata) {
+    function getResourceMetadata() public onlyMember(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
         return resourceMetadatas[address(this)];
     }
 

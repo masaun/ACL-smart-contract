@@ -43,7 +43,7 @@ contract AccessControlList {
 
     /**
      * @dev - Check permission (Read/Write) for admin users 
-     */ 
+     */
     modifier onlyAdmin(address user) {
         //@dev - Check whether a user specified has an admin role or not 
         for (uint i=0; i < currentAdminAddresses.length; i++) {
