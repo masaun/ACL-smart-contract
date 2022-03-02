@@ -18,8 +18,8 @@ contract ResourceFactory {
 
     constructor() {}
 
-    function createNewResource() public returns (bool) {
-        Resource resource = new Resource();
+    function createNewResource(string memory resourceName, string memory resourceURI) public returns (bool) {
+        Resource resource = new Resource(resourceName, resourceURI);
         resourceAddresses.push(address(resource));
         currentResourceId++;
     }
