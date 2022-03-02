@@ -89,7 +89,7 @@ contract AccessControlList {
      * @param _userAddress - User address that is assigned as a admin role
      */ 
     function assignUserAsAdmin(uint groupId, address _userAddress) public returns (bool) {
-        User storage user = users[currentGroupId];
+        User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
         currentUserId++;
