@@ -63,19 +63,19 @@ describe("Senario Test", function () {
         let txReceipt = await tx.wait()
     })
 
-    it("assignUserAsAdmin()", async function () {
+    it("assignUserAsAdminRole()", async function () {
         const groupId = 0
         const userAddress = USER_1
 
-        let tx = await resource.connect(user1).assignUserAsAdmin(groupId, userAddress)
+        let tx = await resource.connect(user1).assignUserAsAdminRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
-    it("assignUserAsMember()", async function () {
+    it("assignUserAsMemberRole()", async function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await resource.connect(user2).assignUserAsAdmin(groupId, userAddress)
+        let tx = await resource.connect(user2).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
