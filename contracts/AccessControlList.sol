@@ -44,7 +44,7 @@ contract AccessControlList {
     /**
      * @dev - Check permission (Read/Write) for admin users 
      */
-    modifier onlyAdmin(address user) {
+    modifier onlyAdminRole(address user) {
         //@dev - Check whether a user specified has an admin role or not 
         for (uint i=0; i < currentAdminAddresses.length; i++) {
             address adminAddress = currentAdminAddresses[i];
@@ -57,7 +57,7 @@ contract AccessControlList {
     /**
      * @dev - Check permission (Read only) for member users 
      */ 
-    modifier onlyMember(address user) { 
+    modifier onlyMemberRole(address user) { 
         //@dev - Check whether a user specified has a member role or not 
         for (uint i=0; i < currentMemberAddresses.length; i++) {
             address memberAddress = currentMemberAddresses[i];
