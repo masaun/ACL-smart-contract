@@ -4,9 +4,11 @@ const { ethers } = require("hardhat")
 
 describe("Senario Test", function () {
     //@dev - Contract instance
+    let resourceFactory
     let resource
 
     //@dev - Contract addresses
+    let RESOURCE_FACTORY
     let RESOURCE
 
     //@dev - Signers of wallet addresses
@@ -27,13 +29,28 @@ describe("Senario Test", function () {
         USER_2 = user2.address
     })
 
-    it("Deploy the Resource.sol (that the AccessControlList.sol is inherited)", async function () {
+    it("Deploy the ResourceFactory.sol (that the AccessControlList.sol is inherited)", async function () {
+        const ResourceFactory = await ethers.getContractFactory("ResourceFactory")
+        resourceFactory = await ResourceFactory.deploy()
+    })
+
+    it("Create a resource", async function () {
         const resourceName = "Example Resource 1"
         const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
 
+        let tx = await resourceFactory.createNewResource(resourceName, resourceURI)
+        let txReceipt = await tx.wait()
+
+        let currentResourceId = await resourceFactory.getCurrentResourceId()
+        console.log(`currentResourceId: ${ currentResourceId }`)  // [Retunr]: 1
+
+        let resourceId = await Number(currentResourceId) - 1
+        console.log(`resourceId: ${ resourceId }`)  // [Retunr]: 0
+
+        let RESOURCE = await resourceFactory.getResource(resourceId)
+
         const Resource = await ethers.getContractFactory("Resource")
-        resource = await Resource.deploy(resourceName, resourceURI)
-        await resource.deployed()
+        resource = await ethers.getContractAt("Resource", RESOURCE)
     })
 
 
