@@ -27,17 +27,20 @@ describe("Senario Test", function () {
         USER_2 = user2.address
     })
 
-
     it("Deploy the Resource.sol (that the AccessControlList.sol is inherited)", async function () {
+        const resourceName = "Example Resource 1"
+        const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
+
         const Resource = await ethers.getContractFactory("Resource")
-        resource = await Resource.deploy()
+        resource = await Resource.deploy(resourceName, resourceURI)
         await resource.deployed()
     })
 
 
-    ///-----------------------
-    /// Test of main methods
-    ///-----------------------
+    ///-------------------------------------------------------
+    /// Test of methods defined in the AccessControlList.sol
+    /// (These methods are executed via Resource.sol
+    ///-------------------------------------------------------
 
     it("createGroup()", async function () {
         let tx = await resource.connect(user1).createGroup()
@@ -75,4 +78,10 @@ describe("Senario Test", function () {
         let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
         let txReceipt = await tx.wait()
     })
+
+
+    ///-------------------------------------------------------
+    /// Test of methods defined in the Resource.sol
+    ///-------------------------------------------------------
+
 })

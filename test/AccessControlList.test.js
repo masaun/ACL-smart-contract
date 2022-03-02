@@ -35,9 +35,9 @@ describe("AccessControlList", function () {
     })
 
 
-    ///-----------------------
-    /// Test of main methods
-    ///-----------------------
+    ///-------------------------------------------------------
+    /// Test of methods defined in the AccessControlList.sol
+    ///-------------------------------------------------------
 
     it("createGroup()", async function () {
         let tx = await acl.connect(user1).createGroup()
