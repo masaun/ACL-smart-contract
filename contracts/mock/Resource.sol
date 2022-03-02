@@ -16,8 +16,9 @@ contract Resource is AccessControlList {
 
     /**
      * @dev - Constructor
+     * @notice - Only group member who has an admin role can call this method.
      */ 
-    constructor(string memory _resourceName, string memory _resourceURI) {
+    constructor(string memory _resourceName, string memory _resourceURI) onlyAdminRole(msg.sender) {
         ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
         resourceMetadata.resourceName = _resourceName;
         resourceMetadata.resourceURI = _resourceURI;
@@ -28,7 +29,15 @@ contract Resource is AccessControlList {
      * @notice - Only group member who has an admin role can call this method.
      */
     function editResourceMetadata(string memory newResourceName, string memory newResourceURI) public onlyAdminRole(msg.sender) returns (bool) {
-        // [TODO]: Edit method
+        address adminRoleUser = msg.sender;
+
+        ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
+        if (keccak256(abi.encodePacked(newResourceName)) != keccak256(abi.encodePacked(""))) {
+            resourceMetadata.resourceName = newResourceName;
+        }
+        if (keccak256(abi.encodePacked(newResourceURI)) != keccak256(abi.encodePacked(""))) {
+            resourceMetadata.resourceURI = newResourceURI;
+        }
     }
 
     /**
