@@ -18,9 +18,7 @@ contract Resource is AccessControlList {
      * @dev - Constructor
      * @notice - Only group member who has an admin role can call this method.
      */ 
-    constructor(string memory resourceName, string memory resourceURI) onlyAdminRole(msg.sender) {
-        createNewResourceMetadata(resourceName, resourceURI);
-    }
+    constructor() {}
 
     /**
      * @dev - Create a new resource's metadata

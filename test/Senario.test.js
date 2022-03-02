@@ -34,10 +34,7 @@ describe("Senario Test", function () {
     })
 
     it("Create a resource", async function () {
-        const resourceName = "Example Resource 1"
-        const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
-
-        let tx = await resourceFactory.createNewResource(resourceName, resourceURI)
+        let tx = await resourceFactory.connect(user1).createNewResource()
         let txReceipt = await tx.wait()
 
         let currentResourceId = await resourceFactory.getCurrentResourceId()
@@ -47,6 +44,7 @@ describe("Senario Test", function () {
         console.log(`resourceId: ${ resourceId }`)                // [Retunr]: 0
 
         let RESOURCE = await resourceFactory.getResource(resourceId)
+        console.log(`RESOURCE: ${ RESOURCE }`)
 
         const Resource = await ethers.getContractFactory("Resource")
         resource = await ethers.getContractAt("Resource", RESOURCE)
@@ -100,8 +98,15 @@ describe("Senario Test", function () {
     /// Test of methods defined in the Resource.sol
     ///-------------------------------------------------------
 
+    it("createNewResourceMetadata()", async function () {
+        const resourceName = "Example Resource 1"
+        const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
+
+        let resourceMetadata = await resource.connect(user1).createNewResourceMetadata(resourceName, resourceURI)
+    })
+
     it("getResourceMetadata() - Only user who has admin role or member role should be able to call this method", async function () {
-        let resourceMetadata = await resource.connect(user1).getResourceMetadata()
+        let resourceMetadata = await resource.connect(user2).getResourceMetadata()
         let _resourceName = resourceMetadata.resourceName
         let _resourceURI = resourceMetadata.resourceURI
         console.log(`resourceMetadata: ${ resourceMetadata }`)

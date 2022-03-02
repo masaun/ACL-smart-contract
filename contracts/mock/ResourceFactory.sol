@@ -24,8 +24,8 @@ contract ResourceFactory {
     /**
      * @dev - Create a new resource
      */ 
-    function createNewResource(string memory resourceName, string memory resourceURI) public returns (bool) {
-        Resource resource = new Resource(resourceName, resourceURI);
+    function createNewResource() public returns (bool) {
+        Resource resource = new Resource();
         resourceAddresses.push(address(resource));
         currentResourceId++;
     }
