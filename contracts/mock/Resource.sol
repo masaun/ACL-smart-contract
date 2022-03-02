@@ -10,16 +10,41 @@ contract Resource is AccessControlList {
     //@dev - Metadata that are accociated with the Resource contract
     struct ResourceMetadata {
         string resourceName;
-        uint resourceAmount;
+        string resourceURI;   // e.g). Content ID of resource that is stored in IPFS
     }
     mapping (address => ResourceMetadata) resourceMetadatas;  // [Key]: Resource contract address -> the ResourceMetadata struct
 
-    constructor() {}
+    /**
+     * @dev - Constructor
+     * @notice - Only group member who has an admin role can call this method.
+     */ 
+    constructor(string memory _resourceName, string memory _resourceURI) onlyAdminRole(msg.sender) {
+        ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
+        resourceMetadata.resourceName = _resourceName;
+        resourceMetadata.resourceURI = _resourceURI;
+    }
 
     /**
-     * @dev - Get a ResourceMetadata struct that are accociated with the Resource contract
+     * @dev - Edit a resource's metadata
+     * @notice - Only group member who has an admin role can call this method.
+     */
+    function editResourceMetadata(string memory newResourceName, string memory newResourceURI) public onlyAdminRole(msg.sender) returns (bool) {
+        address adminRoleUser = msg.sender;
+
+        ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
+        if (keccak256(abi.encodePacked(newResourceName)) != keccak256(abi.encodePacked(""))) {
+            resourceMetadata.resourceName = newResourceName;
+        }
+        if (keccak256(abi.encodePacked(newResourceURI)) != keccak256(abi.encodePacked(""))) {
+            resourceMetadata.resourceURI = newResourceURI;
+        }
+    }
+
+    /**
+     * @dev - Get a resource's metadata
+     * @notice - Only group member (who has an admin or member role) can call this method.
      */ 
-    function getResourceMetadata() public returns (ResourceMetadata memory _resourceMetadata) {
+    function getResourceMetadata() public onlyMemberRole(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
         return resourceMetadatas[address(this)];
     }
 

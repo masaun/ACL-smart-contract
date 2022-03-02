@@ -11,7 +11,7 @@ contract AccessControlList {
     address[] public currentAdminAddresses;
     address[] public currentMemberAddresses;
 
-    //---------------------------------------
+    //----------------------------------------
     // Storages
     //----------------------------------------
     mapping (uint => User) users;     // [Key]: user ID -> the User struct    
@@ -31,7 +31,41 @@ contract AccessControlList {
     }
 
 
+    //-----------------
+    // Constructor
+    //-----------------
     constructor() {}
+
+
+    //-----------------
+    // Modifiers
+    //-----------------
+
+    /**
+     * @dev - Check permission (Read/Write) for admin users 
+     */
+    modifier onlyAdminRole(address user) {
+        //@dev - Check whether a user specified has an admin role or not 
+        for (uint i=0; i < currentAdminAddresses.length; i++) {
+            address adminAddress = currentAdminAddresses[i];
+            
+            require (user == adminAddress, "Only user who has an admin role can access this resources");
+            _;
+        }
+    }
+
+    /**
+     * @dev - Check permission (Read only) for member users 
+     */ 
+    modifier onlyMemberRole(address user) { 
+        //@dev - Check whether a user specified has a member role or not 
+        for (uint i=0; i < currentMemberAddresses.length; i++) {
+            address memberAddress = currentMemberAddresses[i];
+            
+            require (user == memberAddress, "Only user who has an member role can access this resources");
+            _;
+        }
+    }
 
 
     //------------------------------
