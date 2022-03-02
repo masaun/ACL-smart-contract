@@ -8,6 +8,8 @@ contract AccessControlList {
     uint public currentUserId;   // user ID is counted from 0
     uint public currentGroupId;  // group ID is counted from 0
 
+    address[] public userAddresses;
+
     address[] public currentAdminAddresses;
     address[] public currentMemberAddresses;
 
@@ -67,6 +69,16 @@ contract AccessControlList {
         }
     }
 
+    /**
+     * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
+     */ 
+    modifier checkWhetherUserAlreadyRegisteredOrNot(address user) {
+        for (uint i=0; i < userAddresses.length; i++) {
+            require (user == userAddresses[i], "This user is already registered");
+            _;
+        }
+    }
+
 
     //------------------------------
     // Methods for creating groups
@@ -88,10 +100,11 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
      */ 
-    function assignUserAsAdmin(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsAdmin(uint groupId, address _userAddress) public checkWhetherUserAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
+        userAddresses.push(_userAddress);
         currentUserId++;
 
         currentAdminAddresses.push(_userAddress);
@@ -104,10 +117,11 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMember(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsMember(uint groupId, address _userAddress) public checkWhetherUserAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
+        userAddresses.push(_userAddress);
         currentUserId++;
 
         currentAdminAddresses.push(_userAddress);
