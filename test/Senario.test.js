@@ -100,4 +100,14 @@ describe("Senario Test", function () {
     /// Test of methods defined in the Resource.sol
     ///-------------------------------------------------------
 
+    it("getResourceMetadata() - Only user who has admin role or member role should be able to call this method", async function () {
+        let resourceMetadata = await resource.connect(user1).getResourceMetadata()
+        let _resourceName = resourceMetadata.resourceName
+        let _resourceURI = resourceMetadata.resourceURI
+        console.log(`resourceMetadata: ${ resourceMetadata }`)
+        console.log(`resourceName: ${ _resourceName }`)
+        console.log(`resourceURI: ${ _resourceURI }`)
+    })
+
+
 })

@@ -12,7 +12,7 @@ contract Resource is AccessControlList {
         string resourceName;
         string resourceURI;   // e.g). Content ID of resource that is stored in IPFS
     }
-    mapping (address => ResourceMetadata) resourceMetadatas;  // [Key]: Resource contract address -> the ResourceMetadata struct
+    mapping (address => ResourceMetadata) resourceMetadatas;  // [Key]: This Resource contract address -> the ResourceMetadata struct
 
     /**
      * @dev - Constructor
@@ -51,8 +51,8 @@ contract Resource is AccessControlList {
     /**
      * @dev - Get a resource's metadata
      * @notice - Only group member (who has an admin or member role) can call this method.
-     */ 
-    function getResourceMetadata() public onlyMemberRole(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
+     */
+    function getResourceMetadata() public view onlyMemberRole(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
         return resourceMetadatas[address(this)];
     }
 
