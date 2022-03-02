@@ -19,8 +19,7 @@ describe("AccessControlList", function () {
     let DEPLOYER
     let USER_1, USER_2
 
-    //before(async function () {
-    beforeEach(async function () {
+    before(async function () {
         [deployer, user1, user2, ...users] = await ethers.getSigners()
 
         DEPLOYER = deployer.address

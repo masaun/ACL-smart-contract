@@ -20,8 +20,7 @@ describe("Senario Test", function () {
     let DEPLOYER
     let USER_1, USER_2
 
-    //before(async function () {
-    beforeEach(async function () {
+    before(async function () {
         [deployer, user1, user2, ...users] = await ethers.getSigners()
 
         DEPLOYER = deployer.address
@@ -45,7 +44,7 @@ describe("Senario Test", function () {
         console.log(`currentResourceId: ${ currentResourceId }`)  // [Retunr]: 1
 
         let resourceId = await Number(currentResourceId) - 1
-        console.log(`resourceId: ${ resourceId }`)  // [Retunr]: 0
+        console.log(`resourceId: ${ resourceId }`)                // [Retunr]: 0
 
         let RESOURCE = await resourceFactory.getResource(resourceId)
 
