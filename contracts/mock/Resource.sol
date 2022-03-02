@@ -18,7 +18,15 @@ contract Resource is AccessControlList {
      * @dev - Constructor
      * @notice - Only group member who has an admin role can call this method.
      */ 
-    constructor(string memory _resourceName, string memory _resourceURI) onlyAdminRole(msg.sender) {
+    constructor(string memory resourceName, string memory resourceURI) onlyAdminRole(msg.sender) {
+        createNewResourceMetadata(resourceName, resourceURI);
+    }
+
+    /**
+     * @dev - Create a new resource's metadata
+     * @notice - Only group member who has an admin role can call this method.
+     */ 
+    function createNewResourceMetadata(string memory _resourceName, string memory _resourceURI) public onlyAdminRole(msg.sender) returns (bool) {
         ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
         resourceMetadata.resourceName = _resourceName;
         resourceMetadata.resourceURI = _resourceURI;
