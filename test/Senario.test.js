@@ -1,6 +1,9 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
+//@dev - ethers.js related methods
+const { toWei, fromWei, getEventLog, getCurrentBlock, getCurrentTimestamp } = require('./ethersjs-helper/ethersjsHelper')
+
 
 describe("Senario Test", function () {
     //@dev - Contract instance
@@ -26,6 +29,8 @@ describe("Senario Test", function () {
         DEPLOYER = deployer.address
         USER_1 = user1.address
         USER_2 = user2.address
+        console.log(`USER_1: ${ USER_1 }`)
+        console.log(`USER_2: ${ USER_2 }`)
     })
 
     it("Deploy the ResourceFactory.sol (that the AccessControlList.sol is inherited)", async function () {
@@ -59,6 +64,10 @@ describe("Senario Test", function () {
     it("createGroup()", async function () {
         let tx = await resource.connect(user1).createGroup()
         let txReceipt = await tx.wait()
+
+        //@dev - Retrieve an event log of "GroupCreated"
+        let eventLog = await getEventLog(txReceipt, "GroupCreated")
+        console.log(`eventLog of GroupCreated: ${ eventLog }`)
     })
 
     it("getGroup()", async function () {

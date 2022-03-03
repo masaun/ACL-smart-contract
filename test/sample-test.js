@@ -14,6 +14,12 @@ describe("Greeter", function () {
     // wait until the transaction is mined
     await setGreetingTx.wait();
 
+    // Storage test 
+    const _greet = await greeter.getGreet()
+    console.log(`greet: ${ _greet }`)
+    console.log(`greetNumber: ${ _greet[0] }`)
+    console.log(`greetMessage: ${ _greet[1] }`)
+
     expect(await greeter.greet()).to.equal("Hola, mundo!");
   });
 });

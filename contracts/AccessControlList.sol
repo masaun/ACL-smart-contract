@@ -32,6 +32,13 @@ contract AccessControlList {
         address[] memberAddresses;  //@dev - list of member's wallet addresses
     }
 
+    event GroupCreated(
+        uint groupId,
+        address creator,
+        address[] adminAddresses,
+        address[] memberAddresses
+    );
+
 
     //-----------------
     // Constructor
@@ -71,7 +78,7 @@ contract AccessControlList {
 
     /**
      * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
-     */ 
+     */
     modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
         for (uint i=0; i < userAddresses.length; i++) {
             require (user == userAddresses[i], "This user is already registered");
@@ -87,6 +94,9 @@ contract AccessControlList {
         Group storage group = groups[currentGroupId];
         group.adminAddresses = currentAdminAddresses;
         group.memberAddresses = currentMemberAddresses;
+
+        emit GroupCreated(currentGroupId, msg.sender, group.adminAddresses, group.memberAddresses);
+
         currentGroupId++;
     }
 
@@ -99,7 +109,7 @@ contract AccessControlList {
      * @dev - Assign a user address as a admin role
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
-     */ 
+     */
     function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;

@@ -1,6 +1,9 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
+//@dev - ethers.js related methods
+const { toWei, fromWei, getEventLog, getCurrentBlock, getCurrentTimestamp } = require('./ethersjs-helper/ethersjsHelper')
+
 
 describe("AccessControlList", function () {
 
@@ -25,12 +28,16 @@ describe("AccessControlList", function () {
         DEPLOYER = deployer.address
         USER_1 = user1.address
         USER_2 = user2.address
+        console.log(`USER_1: ${ USER_1 }`)
+        console.log(`USER_2: ${ USER_2 }`)
     })
 
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
         acl = await AccessControlList.deploy()
         await acl.deployed()
+        ACL = acl.address
+        console.log(`ACL: ${ ACL }`)
     })
 
 
@@ -41,11 +48,15 @@ describe("AccessControlList", function () {
     it("createGroup()", async function () {
         let tx = await acl.connect(user1).createGroup()
         let txReceipt = await tx.wait()
+
+        //@dev - Retrieve an event log of "GroupCreated"
+        let eventLog = await getEventLog(txReceipt, "GroupCreated")
+        console.log(`eventLog of GroupCreated: ${ eventLog }`)
     })
 
     it("getGroup()", async function () {
         const groupId = 0
-        let group = await acl.connect(user1).getGroup(groupId)
+        let group = await acl.getGroup(groupId)
         console.log(`group: ${ group }`)
     })
 
@@ -63,6 +74,17 @@ describe("AccessControlList", function () {
 
         let tx = await acl.connect(user2).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
+    })
+
+    it("getUser()", async function () {
+        const userId0 = 0
+        let user0 = await acl.getUser(userId0)
+
+        const userId1 = 1
+        let user1 = await acl.getUser(userId1)
+
+        console.log(`user0: ${ user0 }`)
+        console.log(`user1: ${ user1 }`)
     })
 
     it("removeAdminRole()", async function () {
