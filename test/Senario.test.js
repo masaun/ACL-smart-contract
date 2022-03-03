@@ -43,10 +43,10 @@ describe("Senario Test", function () {
         let resourceId = await Number(currentResourceId) - 1
         console.log(`resourceId: ${ resourceId }`)                // [Retunr]: 0
 
-        let RESOURCE = await resourceFactory.getResource(resourceId)
+        RESOURCE = await resourceFactory.getResource(resourceId)
         console.log(`RESOURCE: ${ RESOURCE }`)
 
-        const Resource = await ethers.getContractFactory("Resource")
+        let Resource = await ethers.getContractFactory("Resource")
         resource = await ethers.getContractAt("Resource", RESOURCE)
     })
 
@@ -59,6 +59,12 @@ describe("Senario Test", function () {
     it("createGroup()", async function () {
         let tx = await resource.connect(user1).createGroup()
         let txReceipt = await tx.wait()
+    })
+
+    it("getGroup()", async function () {
+        const groupId = 0
+        let group = await resource.connect(user1).getGroup(groupId)
+        console.log(`group: ${ group }`)
     })
 
     it("assignUserAsAdminRole()", async function () {
@@ -77,21 +83,32 @@ describe("Senario Test", function () {
         let txReceipt = await tx.wait()
     })
 
-    it("removeAdminRole()", async function () {
-        const groupId = 0
-        const userId = 0
+    it("getUser()", async function () {
+        const userId0 = 0
+        let user0 = await resource.getUser(userId0)
 
-        let tx = await resource.connect(user1).removeAdminRole(groupId, userId)
-        let txReceipt = await tx.wait()
+        const userId1 = 1
+        let user1 = await resource.getUser(userId1)
+
+        console.log(`user0: ${ user0 }`)
+        console.log(`user1: ${ user1 }`)
     })
 
-    it("removeMemberRole()", async function () {
-        const groupId = 0
-        const userId = 1
+    // it("removeAdminRole()", async function () {
+    //     const groupId = 0
+    //     const userId = 0
 
-        let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
-        let txReceipt = await tx.wait()
-    })
+    //     let tx = await resource.connect(user1).removeAdminRole(groupId, userId)
+    //     let txReceipt = await tx.wait()
+    // })
+
+    // it("removeMemberRole()", async function () {
+    //     const groupId = 0
+    //     const userId = 1
+
+    //     let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
+    //     let txReceipt = await tx.wait()
+    // })
 
 
     ///-------------------------------------------------------
@@ -102,7 +119,8 @@ describe("Senario Test", function () {
         const resourceName = "Example Resource 1"
         const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
 
-        let resourceMetadata = await resource.connect(user1).createNewResourceMetadata(resourceName, resourceURI)
+        let tx = await resource.connect(user1).createNewResourceMetadata(resourceName, resourceURI)
+        let txReceipt = await tx.wait()
     })
 
     it("getResourceMetadata() - Only user who has admin role or member role should be able to call this method", async function () {

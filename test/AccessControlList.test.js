@@ -43,6 +43,12 @@ describe("AccessControlList", function () {
         let txReceipt = await tx.wait()
     })
 
+    it("getGroup()", async function () {
+        const groupId = 0
+        let group = await acl.connect(user1).getGroup(groupId)
+        console.log(`group: ${ group }`)
+    })
+
     it("assignUserAsAdminRole()", async function () {
         const groupId = 0
         const userAddress = USER_1

@@ -24,7 +24,10 @@ contract Resource is AccessControlList {
      * @dev - Create a new resource's metadata
      * @notice - Only group member who has an admin role can call this method.
      */ 
-    function createNewResourceMetadata(string memory _resourceName, string memory _resourceURI) public onlyAdminRole(msg.sender) returns (bool) {
+    function createNewResourceMetadata(
+        string memory _resourceName, 
+        string memory _resourceURI
+    ) public onlyAdminRole(msg.sender) returns (bool) {
         ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
         resourceMetadata.resourceName = _resourceName;
         resourceMetadata.resourceURI = _resourceURI;
@@ -34,7 +37,10 @@ contract Resource is AccessControlList {
      * @dev - Edit a resource's metadata
      * @notice - Only group member who has an admin role can call this method.
      */
-    function editResourceMetadata(string memory newResourceName, string memory newResourceURI) public onlyAdminRole(msg.sender) returns (bool) {
+    function editResourceMetadata(
+        string memory newResourceName, 
+        string memory newResourceURI
+    ) public onlyAdminRole(msg.sender) returns (bool) {
         address adminRoleUser = msg.sender;
 
         ResourceMetadata storage resourceMetadata = resourceMetadatas[address(this)];
