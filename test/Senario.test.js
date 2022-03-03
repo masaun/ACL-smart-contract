@@ -70,12 +70,6 @@ describe("Senario Test", function () {
         console.log(`eventLog of GroupCreated: ${ eventLog }`)
     })
 
-    it("getGroup()", async function () {
-        const groupId = 0
-        let group = await resource.connect(user1).getGroup(groupId)
-        console.log(`group: ${ group }`)
-    })
-
     it("assignUserAsAdminRole()", async function () {
         const groupId = 0
         const userAddress = USER_1
@@ -92,6 +86,16 @@ describe("Senario Test", function () {
         let txReceipt = await tx.wait()
     })
 
+
+    ///--------------------------------
+    /// Check 
+    ///--------------------------------
+    it("getGroup()", async function () {
+        const groupId = 0
+        let group = await resource.connect(user1).getGroup(groupId)
+        console.log(`group: ${ group }`)
+    })
+
     it("getUser()", async function () {
         const userId0 = 0
         let user0 = await resource.getUser(userId0)
@@ -103,27 +107,10 @@ describe("Senario Test", function () {
         console.log(`user1: ${ user1 }`)
     })
 
-    // it("removeAdminRole()", async function () {
-    //     const groupId = 0
-    //     const userId = 0
-
-    //     let tx = await resource.connect(user1).removeAdminRole(groupId, userId)
-    //     let txReceipt = await tx.wait()
-    // })
-
-    // it("removeMemberRole()", async function () {
-    //     const groupId = 0
-    //     const userId = 1
-
-    //     let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
-    //     let txReceipt = await tx.wait()
-    // })
-
 
     ///-------------------------------------------------------
     /// Test of methods defined in the Resource.sol
     ///-------------------------------------------------------
-
     it("createNewResourceMetadata()", async function () {
         const resourceName = "Example Resource 1"
         const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
@@ -140,6 +127,27 @@ describe("Senario Test", function () {
         console.log(`resourceName: ${ _resourceName }`)
         console.log(`resourceURI: ${ _resourceURI }`)
     })
+
+
+    ///--------------------------------
+    /// Test that remove roles 
+    ///--------------------------------
+    it("removeAdminRole()", async function () {
+        const groupId = 0
+        const userId = 0
+
+        let tx = await resource.connect(user1).removeAdminRole(groupId, userId)
+        let txReceipt = await tx.wait()
+    })
+
+    it("removeMemberRole()", async function () {
+        const groupId = 0
+        const userId = 1
+
+        let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
+        let txReceipt = await tx.wait()
+    })
+
 
 
 })

@@ -54,18 +54,15 @@ describe("AccessControlList", function () {
         console.log(`eventLog of GroupCreated: ${ eventLog }`)
     })
 
-    it("getGroup()", async function () {
-        const groupId = 0
-        let group = await acl.getGroup(groupId)
-        console.log(`group: ${ group }`)
-    })
-
     it("assignUserAsAdminRole()", async function () {
         const groupId = 0
         const userAddress = USER_1
 
         let tx = await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
         let txReceipt = await tx.wait()
+
+        //@dev - Retrieve an event log of "GroupCreated"
+
     })
 
     it("assignUserAsMemberRole()", async function () {
@@ -74,6 +71,16 @@ describe("AccessControlList", function () {
 
         let tx = await acl.connect(user2).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
+    })
+
+
+    ///--------------------------------
+    /// Check 
+    ///--------------------------------
+    it("getGroup()", async function () {
+        const groupId = 0
+        let group = await acl.getGroup(groupId)
+        console.log(`group: ${ group }`)
     })
 
     it("getUser()", async function () {
@@ -87,6 +94,10 @@ describe("AccessControlList", function () {
         console.log(`user1: ${ user1 }`)
     })
 
+
+    ///--------------------------------
+    /// Test that remove roles 
+    ///--------------------------------
     it("removeAdminRole()", async function () {
         const groupId = 0
         const userId = 0

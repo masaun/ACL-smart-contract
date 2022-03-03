@@ -39,6 +39,14 @@ contract AccessControlList {
         address[] memberAddresses
     );
 
+    event UserAsAdminRoleAssigned(
+        // [TODO]:
+    );
+
+    event UserAsMemberRoleAssigned(
+        // [TODO]:
+    );
+
 
     //-----------------
     // Constructor
@@ -114,8 +122,13 @@ contract AccessControlList {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
+        //console.log("############ user.userAddress (Admin):", user.userAddress);
+        //console.log("############ user.userRole (Admin):", user.userRole);
+        console.log("############ currentUserId", currentUserId);
+
         userAddresses.push(_userAddress);
         currentUserId++;
+
 
         currentAdminAddresses.push(_userAddress);
         Group storage group = groups[groupId];
