@@ -5,7 +5,7 @@ const { ethers } = require("hardhat")
 const { toWei, fromWei, getEventLog, getCurrentBlock, getCurrentTimestamp } = require('./ethersjs-helper/ethersjsHelper')
 
 
-describe("Senario Test", function () {
+describe("Scenario Test", function () {
     //@dev - Contract instance
     let resourceFactory
     let resource
