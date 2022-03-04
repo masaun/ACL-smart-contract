@@ -32,7 +32,7 @@ contract AccessControlList {
 
     struct UserByAddress {  // [Key]: user's wallet address -> the User struct
         uint userId;
-        UserRole userRole;   // Admin or Member
+        UserRole userRole;  // Admin or Member
     }
 
     struct Group {  // [Key]: group ID -> the Group struct
@@ -68,11 +68,14 @@ contract AccessControlList {
 
     /**
      * @dev - Check permission (Read/Write) for admin users 
+     * @dev - Check whether a user specified has an admin role or not
      */
     modifier onlyAdminRole(address user) {
-        //@dev - Check whether a user specified has an admin role or not 
         UserRole _userRole = getUserByAddress(user).userRole;
-        require (_userRole != UserRole.ADMIN, "Only user who has an admin role can access this resources");
+
+        //@dev - If a role of "user" is "ADMIN", this condition below can be passed. 
+        //@dev - Only case that a role of "user" is not "ADMIN", this error message below is displayed
+        require (_userRole == UserRole.ADMIN, "Only user who has an admin role can access this resources");
         _;
     }
 
@@ -80,9 +83,11 @@ contract AccessControlList {
      * @dev - Check permission (Read only) for member users 
      */ 
     modifier onlyMemberRole(address user) { 
-        //@dev - Check whether a user specified has a member role or not 
         UserRole _userRole = getUserByAddress(user).userRole;
-        require (_userRole != UserRole.MEMBER, "Only user who has an member role can access this resources");
+
+        //@dev - If a role of "user" is "MEMBER", this condition below can be passed. 
+        //@dev - Only case that a role of "user" is not "MEMBER", this error message below is displayed
+        require (_userRole == UserRole.MEMBER, "Only user who has an member role can access this resources");
         _;
     }
 

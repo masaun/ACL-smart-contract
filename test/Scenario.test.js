@@ -135,6 +135,9 @@ describe("Scenario Test", function () {
         let userByAddress1 = await resource.getUserByAddress(USER_1)
         console.log(`userByAddress1: ${ userByAddress1 }`)
 
+        let userRole1 = await resource.getUserByAddress(USER_1)[0]
+        console.log(`userRole1: ${ userRole1 }`)
+
         let userByAddress2 = await resource.getUserByAddress(USER_2)
         console.log(`userByAddress2: ${ userByAddress2 }`)
     })
