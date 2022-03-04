@@ -16,10 +16,16 @@ contract ResourceFactory {
 
     address[] public resourceAddresses; //@dev - Every resource's addresses created are stored into this array
 
+    /**
+     * @dev - Constructor
+     */ 
     constructor() {}
 
-    function createNewResource(string memory resourceName, string memory resourceURI) public returns (bool) {
-        Resource resource = new Resource(resourceName, resourceURI);
+    /**
+     * @dev - Create a new resource
+     */ 
+    function createNewResource() public returns (bool) {
+        Resource resource = new Resource();
         resourceAddresses.push(address(resource));
         currentResourceId++;
     }
@@ -32,8 +38,12 @@ contract ResourceFactory {
      * @dev - A resource is identified by a resourceId (uint256)
      * @return resourceAddress - Resource's contract address that is associated with resource ID specified
      */ 
-    function getResource(uint resourceId) public returns (address resourceAddress) {
+    function getResource(uint resourceId) public view returns (address resourceAddress) {
         return resourceAddresses[resourceId];
+    }
+
+    function getCurrentResourceId() public view returns (uint _currentResourceId) {
+        return currentResourceId;
     }
 
 }

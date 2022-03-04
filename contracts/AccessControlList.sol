@@ -3,13 +3,17 @@ pragma solidity ^0.8.10;
 
 import "hardhat/console.sol";
 
+
 contract AccessControlList {
 
     uint public currentUserId;   // user ID is counted from 0
     uint public currentGroupId;  // group ID is counted from 0
 
+    address[] public userAddresses;
+
     address[] public currentAdminAddresses;
     address[] public currentMemberAddresses;
+
 
     //----------------------------------------
     // Storages
@@ -29,6 +33,21 @@ contract AccessControlList {
         address[] adminAddresses;   //@dev - list of admin's wallet addresses
         address[] memberAddresses;  //@dev - list of member's wallet addresses
     }
+
+    event GroupCreated(
+        uint groupId,
+        address creator,
+        address[] adminAddresses,
+        address[] memberAddresses
+    );
+
+    event UserAsAdminRoleAssigned(
+        // [TODO]:
+    );
+
+    event UserAsMemberRoleAssigned(
+        // [TODO]:
+    );
 
 
     //-----------------
@@ -67,6 +86,16 @@ contract AccessControlList {
         }
     }
 
+    /**
+     * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
+     */
+    modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
+        for (uint i=0; i < userAddresses.length; i++) {
+            require (user == userAddresses[i], "This user is already registered");
+            _;
+        }
+    }
+
 
     //------------------------------
     // Methods for creating groups
@@ -75,6 +104,9 @@ contract AccessControlList {
         Group storage group = groups[currentGroupId];
         group.adminAddresses = currentAdminAddresses;
         group.memberAddresses = currentMemberAddresses;
+
+        emit GroupCreated(currentGroupId, msg.sender, group.adminAddresses, group.memberAddresses);
+
         currentGroupId++;
     }
 
@@ -87,11 +119,17 @@ contract AccessControlList {
      * @dev - Assign a user address as a admin role
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
-     */ 
-    function assignUserAsAdmin(uint groupId, address _userAddress) public returns (bool) {
-        User storage user = users[currentGroupId];
+     */
+    function assignUserAsAdminRole(uint groupId, address _userAddress) public returns (bool) {
+    // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+        User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
+        //console.log("############ user.userAddress (Admin):", user.userAddress);
+        //console.log("############ user.userRole (Admin):", user.userRole);
+        console.log("################################################ currentUserId", currentUserId);
+
+        userAddresses.push(_userAddress);
         currentUserId++;
 
         currentAdminAddresses.push(_userAddress);
@@ -104,10 +142,12 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMember(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
+    // function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
+        userAddresses.push(_userAddress);
         currentUserId++;
 
         currentAdminAddresses.push(_userAddress);
@@ -152,11 +192,35 @@ contract AccessControlList {
     }
 
 
-
-
     //-------------------
     // Getter methods
     //-------------------
-    function get() public view returns (string memory) {}
+    function getCurrentGroupId() public view returns (uint _currentGroupId) {
+        return currentGroupId;
+    }
+
+    function getCurrentUserId() public view returns (uint _currentUserId) {
+        return currentUserId;
+    }
+
+    function getGroup(uint groupId) public view returns (Group memory _group) {
+        return groups[groupId];
+    }
+
+    function getUser(uint userId) public view returns (User memory _user) {
+        return users[userId];
+    }
+
+    function getUserAddresses() public view returns (address[] memory _users) {
+        return userAddresses;
+    }
+
+    function getCurrentAdminAddresses() public view returns (address[] memory _currentAdminAddresses) {
+        return currentAdminAddresses;
+    }
+ 
+    function getCurrentMemberAddresses() public view returns (address[] memory _currentMemberAddresses) {
+        return currentMemberAddresses;
+    }
 
 }

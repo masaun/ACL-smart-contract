@@ -1,6 +1,9 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat")
 
+//@dev - ethers.js related methods
+const { toWei, fromWei, getEventLog, getCurrentBlock, getCurrentTimestamp } = require('./ethersjs-helper/ethersjsHelper')
+
 
 describe("AccessControlList", function () {
 
@@ -19,47 +22,106 @@ describe("AccessControlList", function () {
     let DEPLOYER
     let USER_1, USER_2
 
-    //before(async function () {
-    beforeEach(async function () {
+    before(async function () {
         [deployer, user1, user2, ...users] = await ethers.getSigners()
 
         DEPLOYER = deployer.address
         USER_1 = user1.address
         USER_2 = user2.address
+        console.log(`USER_1: ${ USER_1 }`)
+        console.log(`USER_2: ${ USER_2 }`)
     })
 
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
         acl = await AccessControlList.deploy()
         await acl.deployed()
+        ACL = acl.address
+        console.log(`ACL: ${ ACL }`)
     })
 
 
-    ///-----------------------
-    /// Test of main methods
-    ///-----------------------
+    ///-------------------------------------------------------
+    /// Test of methods defined in the AccessControlList.sol
+    ///-------------------------------------------------------
 
     it("createGroup()", async function () {
         let tx = await acl.connect(user1).createGroup()
         let txReceipt = await tx.wait()
+
+        //@dev - Retrieve an event log of "GroupCreated"
+        let eventLog = await getEventLog(txReceipt, "GroupCreated")
+        console.log(`eventLog of GroupCreated: ${ eventLog }`)
     })
 
-    it("assignUserAsAdmin()", async function () {
+    it("assignUserAsAdminRole()", async function () {
         const groupId = 0
         const userAddress = USER_1
 
-        let tx = await acl.connect(user1).assignUserAsAdmin(groupId, userAddress)
+        let tx = await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
         let txReceipt = await tx.wait()
+
+        //@dev - Retrieve an event log of "GroupCreated"
     })
 
-    it("assignUserAsMember()", async function () {
+    it("assignUserAsMemberRole()", async function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await acl.connect(user2).assignUserAsAdmin(groupId, userAddress)
+        let tx = await acl.connect(user2).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
+
+    ///--------------------------------
+    /// Check 
+    ///--------------------------------
+    it("getGroup()", async function () {
+        const groupId = 0
+        let group = await acl.getGroup(groupId)
+        console.log(`group: ${ group }`)
+    })
+
+    it("getUser()", async function () {
+        const userId0 = 0
+        let user0 = await acl.getUser(userId0)
+
+        const userId1 = 1
+        let user1 = await acl.getUser(userId1)
+
+        console.log(`user0: ${ user0 }`)
+        console.log(`user1: ${ user1 }`)
+    })
+
+    it("getUserAddresses()", async function () {
+        let users = await acl.getUserAddresses()
+        console.log(`userAddresses: ${ users }`)
+    })
+
+    it("getCurrentAdminAddresses()", async function () {
+        let currentAdminAddresses = await acl.getCurrentAdminAddresses()
+        console.log(`currentAdminAddresses: ${ currentAdminAddresses }`)
+    })
+
+    it("getCurrentMemberAddresses()", async function () {
+        let currentMemberAddresses = await acl.getCurrentMemberAddresses()
+        console.log(`currentMemberAddresses: ${ currentMemberAddresses }`)
+    })
+
+    it("getCurrentGroupId()", async function () {
+        let currentGroupId = await acl.getCurrentGroupId()
+        console.log(`currentGroupId: ${ currentGroupId }`)
+    })
+
+    it("getCurrentUserId()", async function () {
+        let currentUserId = await acl.getCurrentUserId()
+        console.log(`currentUserId: ${ currentUserId }`)
+    })
+
+
+    ///--------------------------------
+    /// Test that remove roles 
+    ///--------------------------------
     it("removeAdminRole()", async function () {
         const groupId = 0
         const userId = 0
