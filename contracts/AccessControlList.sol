@@ -14,6 +14,7 @@ contract AccessControlList {
     address[] public currentAdminAddresses;
     address[] public currentMemberAddresses;
 
+
     //----------------------------------------
     // Storages
     //----------------------------------------
@@ -200,9 +201,18 @@ contract AccessControlList {
     function getUser(uint userId) public view returns (User memory _user) {
         return users[userId];
     }
- 
+
+
     function getUserAddresses() public view returns (address[] memory _users) {
         return userAddresses;
+    }
+
+    function getCurrentAdminAddresses() public view returns (address[] memory _currentAdminAddresses) {
+        return currentAdminAddresses;
+    }
+ 
+    function getCurrentMemberAddresses() public view returns (address[] memory _currentMemberAddresses) {
+        return currentMemberAddresses;
     }
 
 }

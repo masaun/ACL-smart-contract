@@ -62,7 +62,6 @@ describe("AccessControlList", function () {
         let txReceipt = await tx.wait()
 
         //@dev - Retrieve an event log of "GroupCreated"
-
     })
 
     it("assignUserAsMemberRole()", async function () {
@@ -97,6 +96,21 @@ describe("AccessControlList", function () {
     it("getUserAddresses()", async function () {
         let users = await acl.getUserAddresses()
         console.log(`userAddresses: ${ users }`)
+    })
+
+    it("getUserAddresses()", async function () {
+        let users = await acl.getUserAddresses()
+        console.log(`userAddresses: ${ users }`)
+    })
+
+    it("getCurrentAdminAddresses()", async function () {
+        let currentAdminAddresses = await acl.getCurrentAdminAddresses()
+        console.log(`currentAdminAddresses: ${ currentAdminAddresses }`)
+    })
+
+    it("getCurrentMemberAddresses()", async function () {
+        let currentMemberAddresses = await acl.getCurrentMemberAddresses()
+        console.log(`currentMemberAddresses: ${ currentMemberAddresses }`)
     })
 
 
