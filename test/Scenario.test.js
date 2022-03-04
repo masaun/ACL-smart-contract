@@ -107,10 +107,41 @@ describe("Scenario Test", function () {
         console.log(`user1: ${ user1 }`)
     })
 
+    it("getUserAddresses()", async function () {
+        let users = await resource.getUserAddresses()
+        console.log(`userAddresses: ${ users }`)
+    })
+
+    it("getCurrentAdminAddresses()", async function () {
+        let currentAdminAddresses = await resource.getCurrentAdminAddresses()
+        console.log(`currentAdminAddresses: ${ currentAdminAddresses }`)
+    })
+
+    it("getCurrentMemberAddresses()", async function () {
+        let currentMemberAddresses = await resource.getCurrentMemberAddresses()
+        console.log(`currentMemberAddresses: ${ currentMemberAddresses }`)
+    })
+
+    it("getCurrentGroupId()", async function () {
+        let currentGroupId = await resource.getCurrentGroupId()
+        console.log(`currentGroupId: ${ currentGroupId }`)
+    })
+
 
     ///-------------------------------------------------------
     /// Test of methods defined in the Resource.sol
     ///-------------------------------------------------------
+    it("getUserByAddress()", async function () {
+        let userByAddress1 = await resource.getUserByAddress(USER_1)
+        console.log(`userByAddress1: ${ userByAddress1 }`)
+
+        let userRole1 = await resource.getUserByAddress(USER_1)[0]
+        console.log(`userRole1: ${ userRole1 }`)
+
+        let userByAddress2 = await resource.getUserByAddress(USER_2)
+        console.log(`userByAddress2: ${ userByAddress2 }`)
+    })
+
     it("createNewResourceMetadata()", async function () {
         const resourceName = "Example Resource 1"
         const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
@@ -147,7 +178,5 @@ describe("Scenario Test", function () {
         let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
         let txReceipt = await tx.wait()
     })
-
-
 
 })

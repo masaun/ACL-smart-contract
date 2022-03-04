@@ -18,7 +18,8 @@ contract AccessControlList {
     //----------------------------------------
     // Storages
     //----------------------------------------
-    mapping (uint => User) users;     // [Key]: user ID -> the User struct    
+    mapping (uint => User) users;     // [Key]: user ID -> the User struct
+    mapping (address => UserByAddress) userByAddresses;     // [Key]: user's address -> the UserByAddress struct 
     mapping (uint => Group) groups;   // [Key]: group ID -> the Group struct
 
     //@dev - Role type: Admin user can read/write <-> member user can read only
@@ -27,6 +28,11 @@ contract AccessControlList {
     struct User {  // [Key]: user ID -> the User struct
         address userAddress;
         UserRole userRole;   // Admin or Member
+    }
+
+    struct UserByAddress {  // [Key]: user's wallet address -> the User struct
+        uint userId;
+        UserRole userRole;  // Admin or Member
     }
 
     struct Group {  // [Key]: group ID -> the Group struct
@@ -62,45 +68,45 @@ contract AccessControlList {
 
     /**
      * @dev - Check permission (Read/Write) for admin users 
+     * @dev - Check whether a user specified has an admin role or not
      */
     modifier onlyAdminRole(address user) {
-        //@dev - Check whether a user specified has an admin role or not 
-        for (uint i=0; i < currentAdminAddresses.length; i++) {
-            address adminAddress = currentAdminAddresses[i];
-            
-            require (user == adminAddress, "Only user who has an admin role can access this resources");
-            _;
-        }
+        UserRole _userRole = getUserByAddress(user).userRole;
+
+        //@dev - If a role of "user" is "ADMIN", this condition below can be passed. 
+        //@dev - Only case that a role of "user" is not "ADMIN", this error message below is displayed
+        require (_userRole == UserRole.ADMIN, "Only user who has an admin role can access this resources");
+        _;
     }
 
     /**
      * @dev - Check permission (Read only) for member users 
      */ 
     modifier onlyMemberRole(address user) { 
-        //@dev - Check whether a user specified has a member role or not 
-        for (uint i=0; i < currentMemberAddresses.length; i++) {
-            address memberAddress = currentMemberAddresses[i];
-            
-            require (user == memberAddress, "Only user who has an member role can access this resources");
-            _;
-        }
+        UserRole _userRole = getUserByAddress(user).userRole;
+
+        //@dev - If a role of "user" is "MEMBER", this condition below can be passed. 
+        //@dev - Only case that a role of "user" is not "MEMBER", this error message below is displayed
+        require (_userRole == UserRole.MEMBER, "Only user who has an member role can access this resources");
+        _;
     }
 
     /**
      * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
      */
-    modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
-        for (uint i=0; i < userAddresses.length; i++) {
-            require (user == userAddresses[i], "This user is already registered");
-            _;
-        }
-    }
+    // [TODO]: Need to fix this modifier method
+    // modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
+    //     for (uint i=0; i < userAddresses.length; i++) {
+    //         require (user == userAddresses[i], "This user is already registered");
+    //         _;
+    //     }
+    // }
 
 
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup() public returns (bool)  {
+    function createGroup() public returns (bool) {
         Group storage group = groups[currentGroupId];
         group.adminAddresses = currentAdminAddresses;
         group.memberAddresses = currentMemberAddresses;
@@ -122,12 +128,15 @@ contract AccessControlList {
      */
     function assignUserAsAdminRole(uint groupId, address _userAddress) public returns (bool) {
     // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+        console.log("############################## currentUserId", currentUserId);
+
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
-        //console.log("############ user.userAddress (Admin):", user.userAddress);
-        //console.log("############ user.userRole (Admin):", user.userRole);
-        console.log("################################################ currentUserId", currentUserId);
+
+        UserByAddress storage userByAddress = userByAddresses[_userAddress];
+        userByAddress.userId = currentUserId;
+        userByAddress.userRole = UserRole.ADMIN;
 
         userAddresses.push(_userAddress);
         currentUserId++;
@@ -143,14 +152,19 @@ contract AccessControlList {
      * @param _userAddress - User address that is assigned as a member role
      */ 
     function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
-    // function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    //function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
+
+        UserByAddress storage userByAddress = userByAddresses[_userAddress];
+        userByAddress.userId = currentUserId;
+        userByAddress.userRole = UserRole.MEMBER; 
+
         userAddresses.push(_userAddress);
         currentUserId++;
 
-        currentAdminAddresses.push(_userAddress);
+        currentMemberAddresses.push(_userAddress);
         Group storage group = groups[groupId];
         group.memberAddresses = currentMemberAddresses;
     }
@@ -209,6 +223,11 @@ contract AccessControlList {
 
     function getUser(uint userId) public view returns (User memory _user) {
         return users[userId];
+    }
+
+    function getUserByAddress(address user) public view returns (UserByAddress memory _userByAddress) {
+        UserByAddress memory userByAddress = userByAddresses[user];
+        return userByAddress;
     }
 
     function getUserAddresses() public view returns (address[] memory _users) {
