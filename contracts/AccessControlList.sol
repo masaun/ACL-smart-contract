@@ -120,7 +120,8 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
      */
-    function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    function assignUserAsAdminRole(uint groupId, address _userAddress) public returns (bool) {
+    // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
@@ -130,7 +131,6 @@ contract AccessControlList {
 
         userAddresses.push(_userAddress);
         currentUserId++;
-
 
         currentAdminAddresses.push(_userAddress);
         Group storage group = groups[groupId];
@@ -142,7 +142,8 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
+    // function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
