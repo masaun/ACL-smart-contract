@@ -194,6 +194,14 @@ contract AccessControlList {
     //-------------------
     // Getter methods
     //-------------------
+    function getCurrentGroupId() public view returns (uint _currentGroupId) {
+        return currentGroupId;
+    }
+
+    function getCurrentUserId() public view returns (uint _currentUserId) {
+        return currentUserId;
+    }
+
     function getGroup(uint groupId) public view returns (Group memory _group) {
         return groups[groupId];
     }
@@ -201,7 +209,6 @@ contract AccessControlList {
     function getUser(uint userId) public view returns (User memory _user) {
         return users[userId];
     }
-
 
     function getUserAddresses() public view returns (address[] memory _users) {
         return userAddresses;

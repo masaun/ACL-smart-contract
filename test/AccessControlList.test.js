@@ -98,11 +98,6 @@ describe("AccessControlList", function () {
         console.log(`userAddresses: ${ users }`)
     })
 
-    it("getUserAddresses()", async function () {
-        let users = await acl.getUserAddresses()
-        console.log(`userAddresses: ${ users }`)
-    })
-
     it("getCurrentAdminAddresses()", async function () {
         let currentAdminAddresses = await acl.getCurrentAdminAddresses()
         console.log(`currentAdminAddresses: ${ currentAdminAddresses }`)
@@ -111,6 +106,16 @@ describe("AccessControlList", function () {
     it("getCurrentMemberAddresses()", async function () {
         let currentMemberAddresses = await acl.getCurrentMemberAddresses()
         console.log(`currentMemberAddresses: ${ currentMemberAddresses }`)
+    })
+
+    it("getCurrentGroupId()", async function () {
+        let currentGroupId = await acl.getCurrentGroupId()
+        console.log(`currentGroupId: ${ currentGroupId }`)
+    })
+
+    it("getCurrentUserId()", async function () {
+        let currentUserId = await acl.getCurrentUserId()
+        console.log(`currentUserId: ${ currentUserId }`)
     })
 
 
