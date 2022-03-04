@@ -107,6 +107,26 @@ describe("Scenario Test", function () {
         console.log(`user1: ${ user1 }`)
     })
 
+    it("getUserAddresses()", async function () {
+        let users = await resource.getUserAddresses()
+        console.log(`userAddresses: ${ users }`)
+    })
+
+    it("getCurrentAdminAddresses()", async function () {
+        let currentAdminAddresses = await resource.getCurrentAdminAddresses()
+        console.log(`currentAdminAddresses: ${ currentAdminAddresses }`)
+    })
+
+    it("getCurrentMemberAddresses()", async function () {
+        let currentMemberAddresses = await resource.getCurrentMemberAddresses()
+        console.log(`currentMemberAddresses: ${ currentMemberAddresses }`)
+    })
+
+    it("getCurrentGroupId()", async function () {
+        let currentGroupId = await resource.getCurrentGroupId()
+        console.log(`currentGroupId: ${ currentGroupId }`)
+    })
+
 
     ///-------------------------------------------------------
     /// Test of methods defined in the Resource.sol

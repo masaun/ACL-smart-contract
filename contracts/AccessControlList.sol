@@ -89,12 +89,13 @@ contract AccessControlList {
     /**
      * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
      */
-    modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
-        for (uint i=0; i < userAddresses.length; i++) {
-            require (user == userAddresses[i], "This user is already registered");
-            _;
-        }
-    }
+    // [TODO]: Need to fix this modifier method
+    // modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
+    //     for (uint i=0; i < userAddresses.length; i++) {
+    //         require (user == userAddresses[i], "This user is already registered");
+    //         _;
+    //     }
+    // }
 
 
     //------------------------------
@@ -125,9 +126,9 @@ contract AccessControlList {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.ADMIN;
-        //console.log("############ user.userAddress (Admin):", user.userAddress);
-        //console.log("############ user.userRole (Admin):", user.userRole);
-        console.log("################################################ currentUserId", currentUserId);
+        // console.log("############################## user.userAddress (Admin):", _userAddress);
+        // console.log("############################## user.userRole (Admin):", UserRole.ADMIN);
+        console.log("############################## currentUserId", currentUserId);
 
         userAddresses.push(_userAddress);
         currentUserId++;
