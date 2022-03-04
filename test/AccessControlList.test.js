@@ -94,6 +94,11 @@ describe("AccessControlList", function () {
         console.log(`user1: ${ user1 }`)
     })
 
+    it("getUserAddresses()", async function () {
+        let users = await acl.getUserAddresses()
+        console.log(`userAddresses: ${ users }`)
+    })
+
 
     ///--------------------------------
     /// Test that remove roles 

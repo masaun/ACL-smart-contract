@@ -3,6 +3,7 @@ pragma solidity ^0.8.10;
 
 import "hardhat/console.sol";
 
+
 contract AccessControlList {
 
     uint public currentUserId;   // user ID is counted from 0
@@ -124,7 +125,7 @@ contract AccessControlList {
         user.userRole = UserRole.ADMIN;
         //console.log("############ user.userAddress (Admin):", user.userAddress);
         //console.log("############ user.userRole (Admin):", user.userRole);
-        console.log("############ currentUserId", currentUserId);
+        console.log("################################################ currentUserId", currentUserId);
 
         userAddresses.push(_userAddress);
         currentUserId++;
@@ -198,6 +199,10 @@ contract AccessControlList {
 
     function getUser(uint userId) public view returns (User memory _user) {
         return users[userId];
+    }
+ 
+    function getUserAddresses() public view returns (address[] memory _users) {
+        return userAddresses;
     }
 
 }
