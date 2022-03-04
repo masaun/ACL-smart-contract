@@ -131,6 +131,14 @@ describe("Scenario Test", function () {
     ///-------------------------------------------------------
     /// Test of methods defined in the Resource.sol
     ///-------------------------------------------------------
+    it("getUserByAddress()", async function () {
+        let userByAddress1 = await resource.getUserByAddress(USER_1)
+        console.log(`userByAddress1: ${ userByAddress1 }`)
+
+        let userByAddress2 = await resource.getUserByAddress(USER_2)
+        console.log(`userByAddress2: ${ userByAddress2 }`)
+    })
+
     it("createNewResourceMetadata()", async function () {
         const resourceName = "Example Resource 1"
         const resourceURI = "ipfs://QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR"
@@ -167,7 +175,5 @@ describe("Scenario Test", function () {
         let tx = await resource.connect(user2).removeMemberRole(groupId, userId)
         let txReceipt = await tx.wait()
     })
-
-
 
 })
