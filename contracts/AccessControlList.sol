@@ -131,7 +131,7 @@ contract AccessControlList {
 
         UserByAddress storage userByAddress = userByAddresses[_userAddress];
         userByAddress.userId = currentUserId;
-        user.userRole = UserRole.ADMIN;
+        userByAddress.userRole = UserRole.ADMIN;
 
         userAddresses.push(_userAddress);
         currentUserId++;
