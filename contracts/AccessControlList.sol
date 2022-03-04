@@ -147,14 +147,14 @@ contract AccessControlList {
      * @param _userAddress - User address that is assigned as a member role
      */ 
     function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
-    // function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    //function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
 
         UserByAddress storage userByAddress = userByAddresses[_userAddress];
         userByAddress.userId = currentUserId;
-        user.userRole = UserRole.MEMBER; 
+        userByAddress.userRole = UserRole.MEMBER; 
 
         userAddresses.push(_userAddress);
         currentUserId++;
