@@ -1,10 +1,14 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.10;
 
+//@notice - OpenZepelin
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+
+//@notice - Debug
 import "hardhat/console.sol";
 
 
-contract AccessControlList {
+contract AccessControlList is Ownable {
 
     uint public currentUserId;   // user ID is counted from 0
     uint public currentGroupId;  // group ID is counted from 0
@@ -54,12 +58,6 @@ contract AccessControlList {
     event UserAsMemberRoleAssigned(
         // [TODO]:
     );
-
-
-    //-----------------
-    // Constructor
-    //-----------------
-    constructor() {}
 
 
     //-----------------
@@ -116,6 +114,17 @@ contract AccessControlList {
     // }
 
 
+    //-----------------
+    // Constructor
+    //-----------------
+    constructor() {
+        createGroup();
+
+        uint _groupId = getCurrentGroupId() - 1;
+        assignContractCreatorAsInitialAdminRole(_groupId);
+    }
+
+
     //------------------------------
     // Methods for creating groups
     //------------------------------
@@ -133,6 +142,31 @@ contract AccessControlList {
     //-------------------------------------------------------
     // Methods for assiging/updating/removing role of admin or member
     //-------------------------------------------------------
+
+    /**
+     * @dev - Assign a contract creator's address as a initial admin role
+     * @param groupId - group ID that a user address is assigned (as a admin role)
+     */
+    function assignContractCreatorAsInitialAdminRole(uint groupId) public onlyOwner returns (bool) {
+        console.log("############################## currentUserId", currentUserId);
+
+        address _userAddress = msg.sender;  //@dev - msg.sender is a contract creator's address
+
+        User storage user = users[currentUserId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.ADMIN;
+
+        UserByAddress storage userByAddress = userByAddresses[_userAddress];
+        userByAddress.userId = currentUserId;
+        userByAddress.userRole = UserRole.ADMIN;
+
+        userAddresses.push(_userAddress);
+        currentUserId++;
+
+        currentAdminAddresses.push(_userAddress);
+        Group storage group = groups[groupId];
+        group.adminAddresses = currentAdminAddresses;
+    }
 
     /**
      * @dev - Assign a user address as a admin role
