@@ -82,7 +82,7 @@ describe("Scenario Test", function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await resource.connect(user2).assignUserAsMemberRole(groupId, userAddress)
+        let tx = await resource.connect(user1).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 

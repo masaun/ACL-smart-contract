@@ -131,7 +131,7 @@ contract AccessControlList {
 
 
     //-------------------------------------------------------
-    // Methods for assiging/removing role of admin or member
+    // Methods for assiging/updating/removing role of admin or member
     //-------------------------------------------------------
 
     /**
@@ -139,7 +139,7 @@ contract AccessControlList {
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
      */
-    function assignUserAsAdminRole(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsAdminRole(uint groupId, address _userAddress) public onlyAdminRole(msg.sender) returns (bool) {
     // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         console.log("############################## currentUserId", currentUserId);
 
@@ -161,10 +161,11 @@ contract AccessControlList {
 
     /**
      * @dev - Assign a user address as a member role
+     * @dev - This method can be called by users who has an admin role only 
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsMemberRole(uint groupId, address _userAddress) onlyAdminRole(msg.sender) public returns (bool) {
     //function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
@@ -185,7 +186,7 @@ contract AccessControlList {
     /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Member"
      */ 
-    function removeAdminRole(uint groupId, uint userId) public returns (bool) {
+    function removeAdminRole(uint groupId, uint userId) public onlyAdminRole(msg.sender) returns (bool) {
         User storage user = users[userId];
         user.userRole = UserRole.MEMBER;
 
@@ -203,7 +204,7 @@ contract AccessControlList {
     /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Deleted"
      */
-    function removeMemberRole(uint groupId, uint userId) public returns (bool) {
+    function removeMemberRole(uint groupId, uint userId) public onlyAdminOrMemberRole(msg.sender) returns (bool) {
         User storage user = users[userId];
         user.userRole = UserRole.DELETED;
 

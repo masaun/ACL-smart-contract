@@ -68,7 +68,7 @@ describe("AccessControlList", function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await acl.connect(user2).assignUserAsMemberRole(groupId, userAddress)
+        let tx = await acl.connect(user1).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
