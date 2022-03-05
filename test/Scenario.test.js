@@ -150,8 +150,8 @@ describe("Scenario Test", function () {
         let txReceipt = await tx.wait()
     })
 
-    it("getResourceMetadata() - Only user who has admin role or member role should be able to call this method", async function () {
-        let resourceMetadata = await resource.connect(user2).getResourceMetadata()
+    it("getResourceMetadata() - user who has an admin role should be able to call this method", async function () {
+        let resourceMetadata = await resource.connect(user1).getResourceMetadata()
         let _resourceName = resourceMetadata.resourceName
         let _resourceURI = resourceMetadata.resourceURI
         console.log(`resourceMetadata: ${ resourceMetadata }`)
@@ -159,6 +159,14 @@ describe("Scenario Test", function () {
         console.log(`resourceURI: ${ _resourceURI }`)
     })
 
+    it("getResourceMetadata() - user who has a member role should be able to call this method", async function () {
+        let resourceMetadata = await resource.connect(user2).getResourceMetadata()
+        let _resourceName = resourceMetadata.resourceName
+        let _resourceURI = resourceMetadata.resourceURI
+        console.log(`resourceMetadata: ${ resourceMetadata }`)
+        console.log(`resourceName: ${ _resourceName }`)
+        console.log(`resourceURI: ${ _resourceURI }`)
+    })
 
     ///--------------------------------
     /// Test that remove roles 

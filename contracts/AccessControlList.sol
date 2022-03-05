@@ -67,7 +67,7 @@ contract AccessControlList {
     //-----------------
 
     /**
-     * @dev - Check permission (Read/Write) for admin users 
+     * @dev - Check permission that only users who has an admin role can access resources
      * @dev - Check whether a user specified has an admin role or not
      */
     modifier onlyAdminRole(address user) {
@@ -75,21 +75,34 @@ contract AccessControlList {
 
         //@dev - If a role of "user" is "ADMIN", this condition below can be passed. 
         //@dev - Only case that a role of "user" is not "ADMIN", this error message below is displayed
-        require (_userRole == UserRole.ADMIN, "Only user who has an admin role can access this resources");
+        require (_userRole == UserRole.ADMIN, "Only users who has an admin role can access this resources");
         _;
     }
 
     /**
-     * @dev - Check permission (Read only) for member users 
+     * @dev - Check a permission that only users who has a member role can access resources
      */ 
     modifier onlyMemberRole(address user) { 
         UserRole _userRole = getUserByAddress(user).userRole;
 
         //@dev - If a role of "user" is "MEMBER", this condition below can be passed. 
         //@dev - Only case that a role of "user" is not "MEMBER", this error message below is displayed
-        require (_userRole == UserRole.MEMBER, "Only user who has an member role can access this resources");
+        require (_userRole == UserRole.MEMBER, "Only users who has a member role can access this resources");
         _;
     }
+
+    /**
+     * @dev - Check a permission that only users who has admin role or member role can access resources
+     */ 
+    modifier onlyAdminOrMemberRole(address user) { 
+        UserRole _userRole = getUserByAddress(user).userRole;
+
+        //@dev - If a role of "user" is "MEMBER", this condition below can be passed. 
+        //@dev - Only case that a role of "user" is not "MEMBER", this error message below is displayed
+        require (_userRole == UserRole.ADMIN || _userRole == UserRole.MEMBER, "Only users who has an admin role or a member role can access this resources");
+        _;
+    }
+
 
     /**
      * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)

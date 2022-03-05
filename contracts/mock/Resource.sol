@@ -54,9 +54,9 @@ contract Resource is AccessControlList {
 
     /**
      * @dev - Get a resource's metadata
-     * @notice - Only group member (who has an admin or member role) can call this method.
+     * @notice - Only group member (who has an admin role or a member role) can call this method.
      */
-    function getResourceMetadata() public view onlyMemberRole(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
+    function getResourceMetadata() public view onlyAdminOrMemberRole(msg.sender) returns (ResourceMetadata memory _resourceMetadata) {
         return resourceMetadatas[address(this)];
     }
 
