@@ -34,8 +34,12 @@ describe("AccessControlList", function () {
 
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
+        
+        //@dev - When the AccessControlList.sol is deployed, initial group is created and this contract creator is assigned as a initial admin role
         acl = await AccessControlList.deploy()
+
         await acl.deployed()
+        
         ACL = acl.address
         console.log(`ACL: ${ ACL }`)
     })

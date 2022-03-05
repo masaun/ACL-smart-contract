@@ -118,7 +118,7 @@ contract AccessControlList is Ownable {
     // Constructor
     //-----------------
     constructor() {
-        createGroup();
+        createInitialGroup();
 
         uint _groupId = getCurrentGroupId() - 1;
         assignContractCreatorAsInitialAdminRole(_groupId);
@@ -128,7 +128,26 @@ contract AccessControlList is Ownable {
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup() public returns (bool) {
+
+    /**
+     * @dev - Create a initial group. 
+     * @notice - this method can be created by a contract creator (deployer).
+     */
+    function createInitialGroup() public onlyOwner returns (bool) {
+        Group storage group = groups[currentGroupId];
+        group.adminAddresses = currentAdminAddresses;
+        group.memberAddresses = currentMemberAddresses;
+
+        emit GroupCreated(currentGroupId, msg.sender, group.adminAddresses, group.memberAddresses);
+
+        currentGroupId++;
+    }
+
+    /**
+     * @dev - Create a initial group. 
+     * @notice - this method can be created by users who has an admin role.
+     */ 
+    function createGroup() public onlyAdminRole(msg.sender) returns (bool) {
         Group storage group = groups[currentGroupId];
         group.adminAddresses = currentAdminAddresses;
         group.memberAddresses = currentMemberAddresses;
