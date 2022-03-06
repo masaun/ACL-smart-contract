@@ -39,6 +39,7 @@ describe("Scenario Test", function () {
     })
 
     it("Create a resource", async function () {
+        //@dev - When the Resource (that the AccessControlList.sol is inherited) is created (deployed), initial group is created and this contract creator is assigned as a initial admin role
         let tx = await resourceFactory.connect(user1).createNewResource()
         let txReceipt = await tx.wait()
 

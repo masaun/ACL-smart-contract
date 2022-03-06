@@ -237,6 +237,35 @@ contract AccessControlList is Ownable {
     }
 
     /**
+     * @dev - Update a role of user who has a member role at the moment from "Member" to "Admin"
+     * @param groupId - group ID that a user address is assigned (as a member role)
+     * @param userId - User ID who has a member role at the moment
+     */ 
+    function updateRole(uint groupId, uint userId) onlyAdminRole(msg.sender) public returns (bool) {
+        User storage user = users[userId];
+        user.userRole = UserRole.ADMIN;
+
+        address _userAddress = user.userAddress;
+        UserByAddress storage userByAddress = userByAddresses[_userAddress];
+        userByAddress.userRole = UserRole.ADMIN; 
+
+        //@dev - Add a user to admin addresses list
+        currentAdminAddresses.push(_userAddress);
+
+        //@dev - Remove a user from member addresses list
+        for (uint i=0; i < currentMemberAddresses.length; i++) {
+            address memberAddress = currentMemberAddresses[i];
+            if (memberAddress == _userAddress) {
+                delete currentMemberAddresses[i];
+            }
+        }
+        
+        Group storage group = groups[groupId];
+        group.adminAddresses = currentAdminAddresses;
+        group.memberAddresses = currentMemberAddresses;
+    }
+
+    /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Member"
      */ 
     function removeAdminRole(uint groupId, uint userId) public onlyAdminRole(msg.sender) returns (bool) {
