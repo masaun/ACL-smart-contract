@@ -1,10 +1,14 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.10;
 
+//@notice - OpenZepelin
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+
+//@notice - Debug
 import "hardhat/console.sol";
 
 
-contract AccessControlList {
+contract AccessControlList is Ownable {
 
     uint public currentUserId;   // user ID is counted from 0
     uint public currentGroupId;  // group ID is counted from 0
@@ -54,12 +58,6 @@ contract AccessControlList {
     event UserAsMemberRoleAssigned(
         // [TODO]:
     );
-
-
-    //-----------------
-    // Constructor
-    //-----------------
-    constructor() {}
 
 
     //-----------------
@@ -116,10 +114,40 @@ contract AccessControlList {
     // }
 
 
+    //-----------------
+    // Constructor
+    //-----------------
+    constructor() {
+        createInitialGroup();
+
+        uint _groupId = getCurrentGroupId() - 1;
+        assignContractCreatorAsInitialAdminRole(_groupId);
+    }
+
+
     //------------------------------
     // Methods for creating groups
     //------------------------------
-    function createGroup() public returns (bool) {
+
+    /**
+     * @dev - Create a initial group. 
+     * @notice - this method can be created by a contract creator (deployer).
+     */
+    function createInitialGroup() public onlyOwner returns (bool) {
+        Group storage group = groups[currentGroupId];
+        group.adminAddresses = currentAdminAddresses;
+        group.memberAddresses = currentMemberAddresses;
+
+        emit GroupCreated(currentGroupId, msg.sender, group.adminAddresses, group.memberAddresses);
+
+        currentGroupId++;
+    }
+
+    /**
+     * @dev - Create a initial group. 
+     * @notice - this method can be created by users who has an admin role.
+     */ 
+    function createGroup() public onlyAdminRole(msg.sender) returns (bool) {
         Group storage group = groups[currentGroupId];
         group.adminAddresses = currentAdminAddresses;
         group.memberAddresses = currentMemberAddresses;
@@ -131,15 +159,40 @@ contract AccessControlList {
 
 
     //-------------------------------------------------------
-    // Methods for assiging/removing role of admin or member
+    // Methods for assiging/updating/removing role of admin or member
     //-------------------------------------------------------
+
+    /**
+     * @dev - Assign a contract creator's address as a initial admin role
+     * @param groupId - group ID that a user address is assigned (as a admin role)
+     */
+    function assignContractCreatorAsInitialAdminRole(uint groupId) public onlyOwner returns (bool) {
+        console.log("############################## currentUserId", currentUserId);
+
+        address _userAddress = msg.sender;  //@dev - msg.sender is a contract creator's address
+
+        User storage user = users[currentUserId];
+        user.userAddress = _userAddress;
+        user.userRole = UserRole.ADMIN;
+
+        UserByAddress storage userByAddress = userByAddresses[_userAddress];
+        userByAddress.userId = currentUserId;
+        userByAddress.userRole = UserRole.ADMIN;
+
+        userAddresses.push(_userAddress);
+        currentUserId++;
+
+        currentAdminAddresses.push(_userAddress);
+        Group storage group = groups[groupId];
+        group.adminAddresses = currentAdminAddresses;
+    }
 
     /**
      * @dev - Assign a user address as a admin role
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
      */
-    function assignUserAsAdminRole(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsAdminRole(uint groupId, address _userAddress) public onlyAdminRole(msg.sender) returns (bool) {
     // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         console.log("############################## currentUserId", currentUserId);
 
@@ -161,10 +214,11 @@ contract AccessControlList {
 
     /**
      * @dev - Assign a user address as a member role
+     * @dev - This method can be called by users who has an admin role only 
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMemberRole(uint groupId, address _userAddress) public returns (bool) {
+    function assignUserAsMemberRole(uint groupId, address _userAddress) onlyAdminRole(msg.sender) public returns (bool) {
     //function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
@@ -185,7 +239,7 @@ contract AccessControlList {
     /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Member"
      */ 
-    function removeAdminRole(uint groupId, uint userId) public returns (bool) {
+    function removeAdminRole(uint groupId, uint userId) public onlyAdminRole(msg.sender) returns (bool) {
         User storage user = users[userId];
         user.userRole = UserRole.MEMBER;
 
@@ -203,7 +257,7 @@ contract AccessControlList {
     /**
      * @dev - Remove admin role from a admin user. After that, a role status of this user become "Deleted"
      */
-    function removeMemberRole(uint groupId, uint userId) public returns (bool) {
+    function removeMemberRole(uint groupId, uint userId) public onlyAdminOrMemberRole(msg.sender) returns (bool) {
         User storage user = users[userId];
         user.userRole = UserRole.DELETED;
 

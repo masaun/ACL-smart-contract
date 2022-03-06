@@ -14,18 +14,18 @@ describe("AccessControlList", function () {
     let ACL
 
     //@dev - Signers of wallet addresses
-    let deployer
+    let contractCreator
     let user1, user2
     let users
 
     //@dev - Wallet addresses
-    let DEPLOYER
+    let CONTRACT_CREATOR
     let USER_1, USER_2
 
     before(async function () {
-        [deployer, user1, user2, ...users] = await ethers.getSigners()
+        [contractCreator, user1, user2, ...users] = await ethers.getSigners()
 
-        DEPLOYER = deployer.address
+        CONTRACT_CREATOR = contractCreator.address
         USER_1 = user1.address
         USER_2 = user2.address
         console.log(`USER_1: ${ USER_1 }`)
@@ -34,8 +34,12 @@ describe("AccessControlList", function () {
 
     it("Deploy the AccessControlList.sol", async function () {
         const AccessControlList = await ethers.getContractFactory("AccessControlList")
+        
+        //@dev - When the AccessControlList.sol is deployed, initial group is created and this contract creator is assigned as a initial admin role
         acl = await AccessControlList.deploy()
+
         await acl.deployed()
+        
         ACL = acl.address
         console.log(`ACL: ${ ACL }`)
     })
@@ -68,7 +72,7 @@ describe("AccessControlList", function () {
         const groupId = 0
         const userAddress = USER_2
 
-        let tx = await acl.connect(user2).assignUserAsMemberRole(groupId, userAddress)
+        let tx = await acl.connect(user1).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
