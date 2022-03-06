@@ -101,17 +101,14 @@ contract AccessControlList is Ownable {
         _;
     }
 
-
     /**
      * @dev - Check whether a user is already registered or not. (Chekch whether a user already has a User ID or not)
      */
-    // [TODO]: Need to fix this modifier method
-    // modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
-    //     for (uint i=0; i < userAddresses.length; i++) {
-    //         require (user == userAddresses[i], "This user is already registered");
-    //         _;
-    //     }
-    // }
+    modifier checkWhetherUserIsAlreadyRegisteredOrNot(address user) {
+        bool existingUser = _checkWhetherUserIsAlreadyRegisteredOrNot(user);
+        require (existingUser != true, "This user is already registered");
+        _;
+    }
 
 
     //-----------------
@@ -192,8 +189,8 @@ contract AccessControlList is Ownable {
      * @param groupId - group ID that a user address is assigned (as a admin role)
      * @param _userAddress - User address that is assigned as a admin role
      */
-    function assignUserAsAdminRole(uint groupId, address _userAddress) public onlyAdminRole(msg.sender) returns (bool) {
-    // function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    //function assignUserAsAdminRole(uint groupId, address _userAddress) public onlyAdminRole(msg.sender) returns (bool) {
+    function assignUserAsAdminRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         console.log("############################## currentUserId", currentUserId);
 
         User storage user = users[currentUserId];
@@ -218,8 +215,8 @@ contract AccessControlList is Ownable {
      * @param groupId - group ID that a user address is assigned (as a member role)
      * @param _userAddress - User address that is assigned as a member role
      */ 
-    function assignUserAsMemberRole(uint groupId, address _userAddress) onlyAdminRole(msg.sender) public returns (bool) {
-    //function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
+    //function assignUserAsMemberRole(uint groupId, address _userAddress) onlyAdminRole(msg.sender) public returns (bool) {
+    function assignUserAsMemberRole(uint groupId, address _userAddress) public checkWhetherUserIsAlreadyRegisteredOrNot(_userAddress) returns (bool) {
         User storage user = users[currentUserId];
         user.userAddress = _userAddress;
         user.userRole = UserRole.MEMBER;
@@ -336,6 +333,20 @@ contract AccessControlList is Ownable {
  
     function getCurrentMemberAddresses() public view returns (address[] memory _currentMemberAddresses) {
         return currentMemberAddresses;
+    }
+
+
+    //--------------------------------------
+    // Getter method that support modifiers
+    //--------------------------------------
+    function _checkWhetherUserIsAlreadyRegisteredOrNot(address user) internal view returns (bool _existingUser) {
+        bool existingUser = false;
+        for (uint i=0; i < userAddresses.length; i++) {
+            if (userAddresses[i] == user) {
+                existingUser = true;
+                return existingUser;
+            }
+        }
     }
 
 }

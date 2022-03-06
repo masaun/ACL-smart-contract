@@ -28,6 +28,7 @@ describe("AccessControlList", function () {
         CONTRACT_CREATOR = contractCreator.address
         USER_1 = user1.address
         USER_2 = user2.address
+        console.log(`CONTRACT_CREATOR: ${ CONTRACT_CREATOR }`)
         console.log(`USER_1: ${ USER_1 }`)
         console.log(`USER_2: ${ USER_2 }`)
     })
