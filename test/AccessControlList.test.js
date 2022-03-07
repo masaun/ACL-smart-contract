@@ -66,7 +66,7 @@ describe("AccessControlList", function () {
         let tx = await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
         let txReceipt = await tx.wait()
 
-        //@dev - Retrieve an event log of "GroupCreated"
+        //@dev - Retrieve an event log of "UserAsAdminRoleAssigned"
     })
 
     it("assignUserAsMemberRole()", async function () {
@@ -75,6 +75,20 @@ describe("AccessControlList", function () {
 
         let tx = await acl.connect(user1).assignUserAsMemberRole(groupId, userAddress)
         let txReceipt = await tx.wait()
+    })
+
+
+    ///------------------------------------------------
+    /// Check whether a modifier works properly or not
+    ///------------------------------------------------
+    it("Modifier of checkWhetherUserIsAlreadyRegisteredOrNot() - Users who has already registered should fail to be assigned as an admin or member role", async function () {
+        const groupId = 0
+        const userAddress = USER_1
+
+        // [TODO]: @dev - Test whether a modifier of checkWhetherUserIsAlreadyRegisteredOrNot() works properly or not by using "Mocha" and "Chai"
+        await expect(
+            await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
+        ).to.be.revertedWith("This user is already registered")
     })
 
 
