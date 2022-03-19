@@ -86,9 +86,13 @@ describe("AccessControlList", function () {
         const userAddress = USER_1
 
         // [TODO]: @dev - Test whether a modifier of checkWhetherUserIsAlreadyRegisteredOrNot() works properly or not by using "Mocha" and "Chai"
-        await expect(
-            await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
-        ).to.be.revertedWith("This user is already registered")
+        // await expect(
+        //     await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
+        // ).to.be.revertedWith("This user is already registered")
+
+        // await expect(
+        //     await acl.connect(user1).assignUserAsAdminRole(groupId, userAddress)
+        // ).to.equalWithError("This user is already registered")
     })
 
 
