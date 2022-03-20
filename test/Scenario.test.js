@@ -64,7 +64,7 @@ describe("Scenario Test", function () {
     ///-------------------------------------------------------
 
     it("createGroup()", async function () {
-        let tx = await resource.connect(user1).createGroup()
+        let tx = await resource.connect(contractCreator).createGroup()
         let txReceipt = await tx.wait()
 
         //@dev - Retrieve an event log of "GroupCreated"
@@ -76,7 +76,7 @@ describe("Scenario Test", function () {
         const groupId = 0
         const userAddress = USER_1
 
-        let tx = await resource.connect(user1).assignUserAsAdminRole(groupId, userAddress)
+        let tx = await resource.connect(contractCreator).assignUserAsAdminRole(groupId, userAddress)
         let txReceipt = await tx.wait()
     })
 
