@@ -24,11 +24,6 @@
 
 <br>
 
-## 【Demo】
-- Demo of senario test below: 
-
-<br>
-
 ## 【Test】
 - Run a unit test of the AccessControlList.sol
 ```
@@ -51,6 +46,12 @@ npm run test:Scenario
 npm run test
 ```
 ( `$ npx hardhat test --network hardhat` )
+
+<br>
+
+## 【Demo】
+- This is the demo that the test of Scenario ( `./test/Scenario.test.js` ) above that includes the whole scenario of this ACL smart contracts is executed.  
+  https://youtu.be/Wc4ZrmJ-TH0  
 
 <br>
 
