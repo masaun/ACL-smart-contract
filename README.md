@@ -9,13 +9,13 @@
 - Users can have permissions (read or write) on a resource identified by a uint256 
 - "admin users" should be able to set and update those permissions  
 - There should be some kind of grouping mechanism for both users and admin users, with the ability to apply permissions to an entire   group, and to apply multiple groups to a resource.  
-  https://docs.google.com/document/d/1obZDbb2_i0FTYNdg6uPQWWEUdyIO51bFsTEiJdokDzk/edit 
+  (More detail of specifications of this ACL smart contract is here: https://docs.google.com/document/d/1obZDbb2_i0FTYNdg6uPQWWEUdyIO51bFsTEiJdokDzk/edit )
 
 <br>
 
 ## 【Workflow】
-- Diagram will be here.  
-  https://app.diagrams.net/#G1gNVoNu8O9ArtN9Vgm8Kzj1rxg09870Mt
+- Diagram that is workflow of this ACL smart contract
+  ![diagram_ACL-smart-contract for-lit-protocol](https://user-images.githubusercontent.com/19357502/159188912-d65ea650-7e08-4c17-988e-d2567b6e78ec.jpeg)
 
 <br>
 
@@ -45,7 +45,10 @@ npm run test
 <br>
 
 ## 【References】
-- 
+- Lit Protocol: 
+  - Website: https://litprotocol.com/
 
-- Prize of the Lit Protocol (in ETH Denver)：https://www.ethdenver.com/bounties/lit-protocol
+<br>
+
+- Prize of the Lit Protocol (in ETH Denver): https://www.ethdenver.com/bounties/lit-protocol
   - Specifications of Access Control List (=ACL) Smart Contract: https://docs.google.com/document/d/1obZDbb2_i0FTYNdg6uPQWWEUdyIO51bFsTEiJdokDzk/edit
